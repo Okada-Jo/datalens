@@ -1,0 +1,251 @@
+id,product,revenue,country
+1,Mouse,21.37,Japan
+2,Monitor,22.74,France
+3,Webcam,24.11,United Kingdom
+4,Keyboard,25.48,Germany
+5,Mouse,26.85,Japan
+6,Monitor,28.22,France
+7,Webcam,29.59,United Kingdom
+8,Keyboard,30.96,Germany
+9,Mouse,32.33,Japan
+10,Monitor,33.7,France
+11,Webcam,35.07,United Kingdom
+12,Keyboard,36.44,Germany
+13,Mouse,37.81,Japan
+14,Monitor,39.18,France
+15,Webcam,40.55,United Kingdom
+16,Keyboard,41.92,Germany
+17,Mouse,43.29,Japan
+18,Monitor,44.66,France
+19,Webcam,46.03,United Kingdom
+20,Keyboard,47.4,Germany
+21,Mouse,48.77,Japan
+22,Monitor,50.14,France
+23,Webcam,51.51,United Kingdom
+24,Keyboard,52.88,Germany
+25,Mouse,54.25,Japan
+26,Monitor,55.62,France
+27,Webcam,56.99,United Kingdom
+28,Keyboard,58.36,Germany
+29,Mouse,59.73,Japan
+30,Monitor,61.1,France
+31,Webcam,62.47,United Kingdom
+32,Keyboard,63.84,Germany
+33,Mouse,65.21,Japan
+34,Monitor,66.58,France
+35,Webcam,67.95,United Kingdom
+36,Keyboard,69.32,Germany
+37,Mouse,70.69,Japan
+38,Monitor,72.06,France
+39,Webcam,73.43,United Kingdom
+40,Keyboard,74.8,Germany
+41,Mouse,76.17,Japan
+42,Monitor,77.54,France
+43,Webcam,78.91,United Kingdom
+44,Keyboard,80.28,Germany
+45,Mouse,81.65,Japan
+46,Monitor,83.02,France
+47,Webcam,84.39,United Kingdom
+48,Keyboard,85.76,Germany
+49,Mouse,87.13,Japan
+50,Monitor,88.5,France
+51,Webcam,89.87,United Kingdom
+52,Keyboard,91.24,Germany
+53,Mouse,92.61,Japan
+54,Monitor,93.98,France
+55,Webcam,95.35,United Kingdom
+56,Keyboard,96.72,Germany
+57,Mouse,98.09,Japan
+58,Monitor,99.46,France
+59,Webcam,100.83,United Kingdom
+60,Keyboard,102.2,Germany
+61,Mouse,103.57,Japan
+62,Monitor,104.94,France
+63,Webcam,106.31,United Kingdom
+64,Keyboard,107.68,Germany
+65,Mouse,109.05,Japan
+66,Monitor,110.42,France
+67,Webcam,111.79,United Kingdom
+68,Keyboard,113.16,Germany
+69,Mouse,114.53,Japan
+70,Monitor,115.9,France
+71,Webcam,117.27,United Kingdom
+72,Keyboard,118.64,Germany
+73,Mouse,120.01,Japan
+74,Monitor,121.38,France
+75,Webcam,122.75,United Kingdom
+76,Keyboard,124.12,Germany
+77,Mouse,125.49,Japan
+78,Monitor,126.86,France
+79,Webcam,128.23,United Kingdom
+80,Keyboard,129.6,Germany
+81,Mouse,130.97,Japan
+82,Monitor,132.34,France
+83,Webcam,133.71,United Kingdom
+84,Keyboard,135.08,Germany
+85,Mouse,136.45,Japan
+86,Monitor,137.82,France
+87,Webcam,139.19,United Kingdom
+88,Keyboard,140.56,Germany
+89,Mouse,141.93,Japan
+90,Monitor,143.3,France
+91,Webcam,144.67,United Kingdom
+92,Keyboard,146.04,Germany
+93,Mouse,147.41,Japan
+94,Monitor,148.78,France
+95,Webcam,150.15,United Kingdom
+96,Keyboard,151.52,Germany
+97,Mouse,152.89,Japan
+98,Monitor,154.26,France
+99,Webcam,155.63,United Kingdom
+100,Keyboard,157.0,Germany
+101,Mouse,158.37,Japan
+102,Monitor,159.74,France
+103,Webcam,161.11,United Kingdom
+104,Keyboard,162.48,Germany
+105,Mouse,163.85,Japan
+106,Monitor,165.22,France
+107,Webcam,166.59,United Kingdom
+108,Keyboard,167.96,Germany
+109,Mouse,169.33,Japan
+110,Monitor,170.7,France
+111,Webcam,172.07,United Kingdom
+112,Keyboard,173.44,Germany
+113,Mouse,174.81,Japan
+114,Monitor,176.18,France
+115,Webcam,177.55,United Kingdom
+116,Keyboard,178.92,Germany
+117,Mouse,180.29,Japan
+118,Monitor,181.66,France
+119,Webcam,183.03,United Kingdom
+120,Keyboard,184.4,Germany
+121,Mouse,185.77,Japan
+122,Monitor,187.14,France
+123,Webcam,188.51,United Kingdom
+124,Keyboard,189.88,Germany
+125,Mouse,191.25,Japan
+126,Monitor,192.62,France
+127,Webcam,193.99,United Kingdom
+128,Keyboard,195.36,Germany
+129,Mouse,196.73,Japan
+130,Monitor,198.1,France
+131,Webcam,199.47,United Kingdom
+132,Keyboard,200.84,Germany
+133,Mouse,202.21,Japan
+134,Monitor,203.58,France
+135,Webcam,204.95,United Kingdom
+136,Keyboard,206.32,Germany
+137,Mouse,207.69,Japan
+138,Monitor,209.06,France
+139,Webcam,210.43,United Kingdom
+140,Keyboard,211.8,Germany
+141,Mouse,213.17,Japan
+142,Monitor,214.54,France
+143,Webcam,215.91,United Kingdom
+144,Keyboard,217.28,Germany
+145,Mouse,218.65,Japan
+146,Monitor,220.02,France
+147,Webcam,221.39,United Kingdom
+148,Keyboard,222.76,Germany
+149,Mouse,224.13,Japan
+150,Monitor,225.5,France
+151,Webcam,226.87,United Kingdom
+152,Keyboard,228.24,Germany
+153,Mouse,229.61,Japan
+154,Monitor,230.98,France
+155,Webcam,232.35,United Kingdom
+156,Keyboard,233.72,Germany
+157,Mouse,235.09,Japan
+158,Monitor,236.46,France
+159,Webcam,237.83,United Kingdom
+160,Keyboard,239.2,Germany
+161,Mouse,240.57,Japan
+162,Monitor,241.94,France
+163,Webcam,243.31,United Kingdom
+164,Keyboard,244.68,Germany
+165,Mouse,246.05,Japan
+166,Monitor,247.42,France
+167,Webcam,248.79,United Kingdom
+168,Keyboard,250.16,Germany
+169,Mouse,251.53,Japan
+170,Monitor,252.9,France
+171,Webcam,254.27,United Kingdom
+172,Keyboard,255.64,Germany
+173,Mouse,257.01,Japan
+174,Monitor,258.38,France
+175,Webcam,259.75,United Kingdom
+176,Keyboard,261.12,Germany
+177,Mouse,262.49,Japan
+178,Monitor,263.86,France
+179,Webcam,265.23,United Kingdom
+180,Keyboard,266.6,Germany
+181,Mouse,267.97,Japan
+182,Monitor,269.34,France
+183,Webcam,270.71,United Kingdom
+184,Keyboard,272.08,Germany
+185,Mouse,273.45,Japan
+186,Monitor,274.82,France
+187,Webcam,276.19,United Kingdom
+188,Keyboard,277.56,Germany
+189,Mouse,278.93,Japan
+190,Monitor,280.3,France
+191,Webcam,281.67,United Kingdom
+192,Keyboard,283.04,Germany
+193,Mouse,284.41,Japan
+194,Monitor,285.78,France
+195,Webcam,287.15,United Kingdom
+196,Keyboard,288.52,Germany
+197,Mouse,289.89,Japan
+198,Monitor,291.26,France
+199,Webcam,292.63,United Kingdom
+200,Keyboard,294.0,Germany
+201,Mouse,295.37,Japan
+202,Monitor,296.74,France
+203,Webcam,298.11,United Kingdom
+204,Keyboard,299.48,Germany
+205,Mouse,300.85,Japan
+206,Monitor,302.22,France
+207,Webcam,303.59,United Kingdom
+208,Keyboard,304.96,Germany
+209,Mouse,306.33,Japan
+210,Monitor,307.7,France
+211,Webcam,309.07,United Kingdom
+212,Keyboard,310.44,Germany
+213,Mouse,311.81,Japan
+214,Monitor,313.18,France
+215,Webcam,314.55,United Kingdom
+216,Keyboard,315.92,Germany
+217,Mouse,317.29,Japan
+218,Monitor,318.66,France
+219,Webcam,320.03,United Kingdom
+220,Keyboard,321.4,Germany
+221,Mouse,322.77,Japan
+222,Monitor,324.14,France
+223,Webcam,325.51,United Kingdom
+224,Keyboard,326.88,Germany
+225,Mouse,328.25,Japan
+226,Monitor,329.62,France
+227,Webcam,330.99,United Kingdom
+228,Keyboard,332.36,Germany
+229,Mouse,333.73,Japan
+230,Monitor,335.1,France
+231,Webcam,336.47,United Kingdom
+232,Keyboard,337.84,Germany
+233,Mouse,339.21,Japan
+234,Monitor,340.58,France
+235,Webcam,341.95,United Kingdom
+236,Keyboard,343.32,Germany
+237,Mouse,344.69,Japan
+238,Monitor,346.06,France
+239,Webcam,347.43,United Kingdom
+240,Keyboard,348.8,Germany
+241,Mouse,350.17,Japan
+242,Monitor,351.54,France
+243,Webcam,352.91,United Kingdom
+244,Keyboard,354.28,Germany
+245,Mouse,355.65,Japan
+246,Monitor,357.02,France
+247,Webcam,358.39,United Kingdom
+248,Keyboard,359.76,Germany
+249,Mouse,361.13,Japan
+250,Monitor,362.5,France
