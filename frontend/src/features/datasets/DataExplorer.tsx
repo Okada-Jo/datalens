@@ -2,30 +2,103 @@ import {
   ChevronLeft,
   ChevronRight,
   LoaderCircle,
+  Search,
+  X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { formatNumber } from "../../lib/format";
 import { useDatasetRows } from "./queries";
 import DataTable from "./DataTable";
+import type { DatasetFilter, DatasetSort } from "../../lib/api";
+import type { ColumnAnalysis } from "../../schemas/dataset";
 
 interface DataExplorerProps {
   datasetId: string;
+  columns: ColumnAnalysis[];
 }
 
 const PAGE_SIZE = 50;
 
 export default function DataExplorer({
   datasetId,
+  columns,
 }: DataExplorerProps) {
   const [page, setPage] = useState(1);
-
+  const [sort, setSort] = useState<DatasetSort | null>(null);
+  const [filters, setFilters] = useState<DatasetFilter[]>([]);
+  const [searchInput, setSearchInput] =
+    useState("");
+  const [search, setSearch] =
+    useState("");
   const {
     data,
     isLoading,
     isFetching,
     error,
-  } = useDatasetRows(datasetId, page, PAGE_SIZE);
+  } = useDatasetRows(
+    datasetId,
+    page,
+    PAGE_SIZE,
+    sort,
+    filters,
+    search,
+  );
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setPage(1);
+      setSearch(searchInput.trim());
+    }, 350);
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [searchInput]);
+
+  function handleAddFilter(filter: DatasetFilter) {
+    setPage(1);
+
+    setFilters((current) => [
+      ...current,
+      filter,
+    ]);
+  }
+
+  function handleRemoveFilter(index: number) {
+    setPage(1);
+
+    setFilters((current) =>
+      current.filter((_, filterIndex) => filterIndex !== index),
+    );
+  }
+
+  function handleClearFilters() {
+    setPage(1);
+    setFilters([]);
+  }
+
+  function handleSort(column: string) {
+    setPage(1);
+
+    setSort((current) => {
+      if (!current || current.column !== column) {
+        return {
+          column,
+          direction: "asc",
+        };
+      }
+
+      if (current.direction === "asc") {
+        return {
+          column,
+          direction: "desc",
+        };
+      }
+
+      return null;
+    });
+  }
 
   if (isLoading) {
     return (
@@ -48,6 +121,37 @@ export default function DataExplorer({
 
   return (
     <div>
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <div className="relative w-full max-w-md">
+          <Search
+            size={16}
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+          />
+
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(event) =>
+              setSearchInput(event.target.value)
+            }
+            placeholder="Search all columns..."
+            className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-9 text-sm text-zinc-700 outline-none placeholder:text-zinc-400 focus:border-zinc-400"
+          />
+
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchInput("");
+              }}
+              className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700"
+              aria-label="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+      </div>
       <div
         className={[
           "transition-opacity",
@@ -55,14 +159,23 @@ export default function DataExplorer({
         ].join(" ")}
       >
         <DataTable
-          columns={data.columns}
+          columns={columns}
           rows={data.rows}
+          sort={sort}
+          filters={filters}
+          onSort={handleSort}
+          onAddFilter={handleAddFilter}
+          onRemoveFilter={handleRemoveFilter}
+          onClearFilters={handleClearFilters}
         />
       </div>
 
       <div className="mt-4 flex items-center justify-between">
         <p className="text-sm text-zinc-500">
-          {formatNumber(data.totalRows)} rows
+          {formatNumber(data.totalRows)}{" "}
+          {filters.length > 0 || search
+            ? "matching rows"
+            : "rows"}
         </p>
 
         <div className="flex items-center gap-3">

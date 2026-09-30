@@ -1,5 +1,5 @@
 import { ArrowLeft, LoaderCircle } from "lucide-react";
-import { Link, NavLink, Outlet, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { useDataset } from "../features/datasets/queries";
 import DatasetOverview from "../features/upload/DatasetOverview";

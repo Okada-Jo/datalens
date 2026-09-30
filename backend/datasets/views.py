@@ -1,8 +1,7 @@
 from pathlib import Path
 
-import math
+import json
 
-import pandas as pd
 from rest_framework.decorators import action
 
 from rest_framework import status, viewsets
@@ -12,6 +11,7 @@ from rest_framework.response import Response
 from .models import Dataset
 from .serializers import DatasetSerializer
 from .services.analysis import analyze_csv
+from .services.query import query_dataset
 
 MAX_FILE_SIZE = 25 * 1024 * 1024
 
@@ -23,21 +23,21 @@ class DatasetViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         uploaded_file = request.FILES.get("file")
         
+        if uploaded_file is None:
+            return Response(
+                {"detail": "No file was provided."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if uploaded_file.size > MAX_FILE_SIZE:
             return Response(
                 {"detail": "The file must be smaller than 25 MB."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
+            
         if uploaded_file.size == 0:
             return Response(
                 {"detail": "The file is empty."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if uploaded_file is None:
-            return Response(
-                {"detail": "No file was provided."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -89,47 +89,100 @@ class DatasetViewSet(viewsets.ModelViewSet):
         dataset = self.get_object()
 
         try:
-            page = max(int(request.query_params.get("page", 1)), 1)
-            page_size = int(request.query_params.get("page_size", 50))
-            page_size = min(max(page_size, 1), 100)
+            page = max(
+                int(request.query_params.get("page", 1)),
+                1,
+            )
+
+            page_size = int(
+                request.query_params.get(
+                    "page_size",
+                    50,
+                )
+            )
+
+            page_size = min(
+                max(page_size, 1),
+                100,
+            )
         except ValueError:
             return Response(
-                {"detail": "Invalid pagination parameters."},
+                {
+                    "detail": (
+                        "Invalid pagination parameters."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        search = request.query_params.get("search")
+
+        sort_column = request.query_params.get(
+            "sort"
+        )
+
+        sort_direction = request.query_params.get(
+            "direction",
+            "asc",
+        )
+
+        if sort_direction not in {"asc", "desc"}:
+            return Response(
+                {
+                    "detail": (
+                        "Sort direction must be "
+                        "'asc' or 'desc'."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        raw_filters = request.query_params.get(
+            "filters",
+            "[]",
+        )
+
+        try:
+            filters = json.loads(raw_filters)
+        except json.JSONDecodeError:
+            return Response(
+                {"detail": "Invalid filters."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not isinstance(filters, list):
+            return Response(
+                {"detail": "Filters must be a list."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
-            df = pd.read_csv(dataset.file.path)
-
-            total_rows = len(df)
-            total_pages = max(math.ceil(total_rows / page_size), 1)
-
-            start = (page - 1) * page_size
-            end = start + page_size
-
-            page_df = df.iloc[start:end]
-
-            # JSON cannot safely represent Pandas NaN values.
-            page_df = page_df.astype(object).where(
-                pd.notna(page_df),
-                None,
+            result = query_dataset(
+                dataset.file.path,
+                page=page,
+                page_size=page_size,
+                sort_column=sort_column,
+                sort_direction=sort_direction,
+                filters=filters,
+                search=search,
             )
 
-            rows = page_df.to_dict(orient="records")
+            return Response(result)
 
+        except ValueError as exc:
+            return Response(
+                {"detail": str(exc)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        except Exception as exc:
             return Response(
                 {
-                    "page": page,
-                    "pageSize": page_size,
-                    "totalRows": total_rows,
-                    "totalPages": total_pages,
-                    "columns": [str(column) for column in df.columns],
-                    "rows": rows,
-                }
-            )
-
-        except Exception:
-            return Response(
-                {"detail": "The dataset rows could not be loaded."},
+                    "detail": (
+                        "The dataset rows "
+                        "could not be loaded."
+                    ),
+                    "error": str(exc),
+                },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

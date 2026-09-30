@@ -1,5 +1,12 @@
 import { useMemo } from "react";
 import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+} from "lucide-react";
+
+import type { DatasetFilter, DatasetSort } from "../../lib/api";
+import {
   tableFeatures,
   useTable,
   type ColumnDef,
@@ -9,31 +16,42 @@ import type {
   DatasetCell,
   DatasetRow,
 } from "../../schemas/datasetRows";
+import type { ColumnAnalysis } from "../../schemas/dataset";
+import FilterBar from "./FilterBar";
 
 const features = tableFeatures({});
 
 type TableFeatures = typeof features;
 
 interface DataTableProps {
-  columns: string[];
+  columns: ColumnAnalysis[];
   rows: DatasetRow[];
+  sort: DatasetSort | null;
+  filters: DatasetFilter[];
+  onSort: (column: string) => void;
+  onAddFilter: (filter: DatasetFilter) => void;
+  onRemoveFilter: (index: number) => void;
+  onClearFilters: () => void;
 }
 
 export default function DataTable({
   columns,
   rows,
+  sort,
+  filters,
+  onSort,
+  onAddFilter,
+  onRemoveFilter,
+  onClearFilters,
 }: DataTableProps) {
   const tableColumns = useMemo<
     ColumnDef<TableFeatures, DatasetRow>[]
   >(
     () =>
-      columns.map((columnName) => ({
-        id: columnName,
-
-        accessorFn: (row) => row[columnName],
-
-        header: columnName,
-
+      columns.map((column) => ({
+        id: column.name,
+        accessorFn: (row) => row[column.name],
+        header: column.name,
         cell: (info) => {
           const value = info.getValue() as DatasetCell;
 
@@ -51,6 +69,13 @@ export default function DataTable({
 
   return (
     <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white">
+      <FilterBar
+        columns={columns}
+        filters={filters}
+        onAddFilter={onAddFilter}
+        onRemoveFilter={onRemoveFilter}
+        onClearFilters={onClearFilters}
+      />
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left text-sm">
           <thead className="border-b border-zinc-200 bg-zinc-50">
@@ -62,7 +87,18 @@ export default function DataTable({
                     className="whitespace-nowrap px-4 py-3 text-xs font-medium text-zinc-500"
                   >
                     {header.isPlaceholder ? null : (
-                      <table.FlexRender header={header} />
+                      <button
+                        type="button"
+                        onClick={() => onSort(header.column.id)}
+                        className="flex w-full items-center gap-2 text-left transition hover:text-zinc-900"
+                      >
+                        <table.FlexRender header={header} />
+
+                        <SortIcon
+                          column={header.column.id}
+                          sort={sort}
+                        />
+                      </button>
                     )}
                   </th>
                 ))}
@@ -96,6 +132,39 @@ export default function DataTable({
         )}
       </div>
     </div>
+  );
+}
+
+function SortIcon({
+  column,
+  sort,
+}: {
+  column: string;
+  sort: DatasetSort | null;
+}) {
+  if (!sort || sort.column !== column) {
+    return (
+      <ArrowUpDown
+        size={13}
+        className="text-zinc-300"
+      />
+    );
+  }
+
+  if (sort.direction === "asc") {
+    return (
+      <ArrowUp
+        size={13}
+        className="text-zinc-700"
+      />
+    );
+  }
+
+  return (
+    <ArrowDown
+      size={13}
+      className="text-zinc-700"
+    />
   );
 }
 

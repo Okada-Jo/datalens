@@ -5,7 +5,7 @@ import {
   Rows3,
 } from "lucide-react";
 
-import type { Dataset } from "../../schemas/dataset";
+import { type Dataset } from "../../schemas/dataset";
 import { formatNumber } from "../../lib/format";
 import { formatFileSize } from "../upload/fileUtils";
 import ColumnCard from "./ColumnCard";
@@ -112,7 +112,10 @@ export default function DatasetOverview({
         </div>
 
         <div className="mt-5">
-          <DataExplorer datasetId={dataset.id} />
+          <DataExplorer
+            datasetId={dataset.id}
+            columns={columns}
+          />
         </div>
       </section>
     </div>

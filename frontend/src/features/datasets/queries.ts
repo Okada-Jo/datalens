@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import { getDataset, getDatasetRows, getDatasets } from "../../lib/api";
+import { getDataset, getDatasetRows, getDatasets, type DatasetFilter, type DatasetSort } from "../../lib/api";
 
 export function useDatasets() {
   return useQuery({
@@ -21,10 +21,31 @@ export function useDatasetRows(
   id: string,
   page: number,
   pageSize: number,
+  sort: DatasetSort | null,
+  filters: DatasetFilter[],
+  search: string,
 ) {
   return useQuery({
-    queryKey: ["datasets", id, "rows", page, pageSize],
-    queryFn: () => getDatasetRows(id, page, pageSize),
+    queryKey: [
+      "datasets",
+      id,
+      "rows",
+      page,
+      pageSize,
+      sort,
+      filters,
+      search,
+    ],
+    queryFn: () =>
+      getDatasetRows(
+        id,
+        page,
+        pageSize,
+        sort,
+        filters,
+        search,
+      ),
     enabled: Boolean(id),
+    placeholderData: keepPreviousData,
   });
 }
