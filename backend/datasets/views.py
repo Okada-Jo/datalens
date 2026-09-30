@@ -166,7 +166,9 @@ class DatasetViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        transformation.delete()
+        dataset.transformations.filter(
+            position__gte=transformation.position
+        ).delete()
 
         return Response(
             status=status.HTTP_204_NO_CONTENT,

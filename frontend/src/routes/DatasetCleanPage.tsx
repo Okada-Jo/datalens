@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 
 import { useTransformations } from "../hooks/useTransformations";
 import { useDataset } from "../features/datasets/queries";
-import { FillMissingForm } from "../components/FillMissingForm";
 import { TransformationHistory } from "../components/TransformationHistory";
+import { TransformationForm } from "../components/TransformationForm";
 
 export function DatasetCleanPage() {
   const { datasetId } = useParams();
@@ -39,7 +39,7 @@ export function DatasetCleanPage() {
       </div>
 
       <div>
-        <FillMissingForm
+        <TransformationForm
           datasetId={datasetId}
           columns={columns}
         />

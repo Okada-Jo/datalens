@@ -51,17 +51,13 @@ export function TransformationHistory({
           <button
             type="button"
             onClick={() =>
-              deleteTransformation.mutate(
-                transformation.id,
-              )
+              deleteTransformation.mutate(transformation.id)
             }
-            disabled={
-              deleteTransformation.isPending
-            }
+            disabled={deleteTransformation.isPending}
             className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Trash2 size={15} />
-            Remove
+            Undo from here
           </button>
         </div>
       ))}
