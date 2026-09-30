@@ -1,7 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 
 import HomePage from "./routes/Home";
-import DatasetPage from "./routes/DataSet";
+import { DatasetOverviewPage } from "./routes/DatasetOverviewPage";
+import { DatasetExplorePage } from "./routes/DatasetExplorerPage";
+import { DatasetLayout } from "./routes/DatasetLayout";
 
 export default function App() {
   return (
@@ -9,8 +11,18 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route
         path="/datasets/:datasetId"
-        element={<DatasetPage />}
-      />
+        element={<DatasetLayout />}
+      >
+        <Route
+          index
+          element={<DatasetOverviewPage />}
+        />
+
+        <Route
+          path="explore"
+          element={<DatasetExplorePage />}
+        />
+      </Route>
     </Routes>
   );
 }

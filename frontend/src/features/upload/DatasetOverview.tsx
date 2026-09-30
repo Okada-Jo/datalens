@@ -3,13 +3,17 @@ import {
   Database,
   FileSpreadsheet,
   Rows3,
+  ArrowRight,
 } from "lucide-react";
+
+import {
+  Link,
+} from "react-router-dom";
 
 import { type Dataset } from "../../schemas/dataset";
 import { formatNumber } from "../../lib/format";
 import { formatFileSize } from "../upload/fileUtils";
 import ColumnCard from "./ColumnCard";
-import DataExplorer from "../datasets/DataExplorer";
 
 
 interface DatasetOverviewProps {
@@ -27,14 +31,8 @@ export default function DatasetOverview({
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10">
-      <div className="mt-8 flex gap-1 border-b border-zinc-200">
-        <span className="border-b-2 border-zinc-900 px-4 py-3 text-sm font-medium text-zinc-900">
-          Overview
-        </span>
-      </div>
-
-      <div>
+    <div className="mx-auto max-w-8xl px-4 py-4">
+      <div className="mb-8 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex size-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600">
             <FileSpreadsheet size={21} />
@@ -49,6 +47,15 @@ export default function DatasetOverview({
               {dataset.originalFilename}
             </p>
           </div>
+        </div>
+        <div>
+          <Link
+            to={`/datasets/${dataset.id}/explore`}
+            className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700"
+            >
+            Explore data
+            <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
 
@@ -97,25 +104,6 @@ export default function DatasetOverview({
               rowCount={dataset.rowCount ?? 0}
             />
           ))}
-        </div>
-      </section>
-
-      <section className="mt-12">
-        <div>
-          <h2 className="text-lg font-semibold text-zinc-900">
-            Data preview
-          </h2>
-
-          <p className="mt-1 text-sm text-zinc-500">
-            Browse the rows in this dataset.
-          </p>
-        </div>
-
-        <div className="mt-5">
-          <DataExplorer
-            datasetId={dataset.id}
-            columns={columns}
-          />
         </div>
       </section>
     </div>

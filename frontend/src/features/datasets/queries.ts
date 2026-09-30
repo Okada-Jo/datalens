@@ -9,10 +9,16 @@ export function useDatasets() {
   });
 }
 
-export function useDataset(id: string) {
+export function useDataset(id: string | undefined) {
   return useQuery({
     queryKey: ["datasets", id],
-    queryFn: () => getDataset(id),
+    queryFn: () => {
+      if (!id) {
+        throw new Error("Dataset ID is required.");
+      }
+
+      return getDataset(id);
+    },
     enabled: Boolean(id),
   });
 }
