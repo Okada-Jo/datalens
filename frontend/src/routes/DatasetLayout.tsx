@@ -23,6 +23,16 @@ export function DatasetLayout() {
       to: `/datasets/${datasetId}/clean`,
       end: false,
     },
+    {
+      label: "Visualize",
+      to: `/datasets/${datasetId}/visualize`,
+      end: false,
+    },
+    {
+      label: "Export",
+      to: `/datasets/${datasetId}/export`,
+      end: false,
+    },
   ];
 
   return (

@@ -1,30 +1,37 @@
 import { useParams } from "react-router-dom";
 
-import { useTransformations } from "../hooks/useTransformations";
-import { useDataset } from "../features/datasets/queries";
-import { TransformationHistory } from "../components/TransformationHistory";
 import { TransformationForm } from "../components/TransformationForm";
+import { TransformationHistory } from "../components/TransformationHistory";
+import { useDatasetRows } from "../features/datasets/queries";
+import { useTransformations } from "../hooks/useTransformations";
 
 export function DatasetCleanPage() {
   const { datasetId } = useParams();
 
   const {
-    data: dataset,
-  } = useDataset(datasetId);
-
-  const {
     data: transformations,
     isLoading: isTransformationsLoading,
-    error,
+    error: transformationsError,
   } = useTransformations(datasetId);
+
+  const {
+    data: rowsData,
+    isLoading: isRowsLoading,
+    error: rowsError,
+  } = useDatasetRows(
+    datasetId!,
+    1,
+    1,
+    null,
+    [],
+    "",
+  );
 
   if (!datasetId) {
     return null;
   }
-  const columns =
-    dataset && "columns" in dataset.analysis
-      ? dataset.analysis.columns
-      : [];
+
+  const columns = rowsData?.columns ?? [];
 
   return (
     <section>
@@ -39,33 +46,45 @@ export function DatasetCleanPage() {
       </div>
 
       <div>
-        <TransformationForm
-          datasetId={datasetId}
-          columns={columns}
-        />
+        <h3 className="font-medium text-zinc-900">
+          Add transformation
+        </h3>
+
+        {isRowsLoading ? (
+          <p className="mt-3 text-sm text-zinc-500">
+            Loading columns...
+          </p>
+        ) : rowsError ? (
+          <p className="mt-3 text-sm text-red-600">
+            Columns could not be loaded.
+          </p>
+        ) : (
+          <TransformationForm
+            datasetId={datasetId}
+            columns={columns}
+          />
+        )}
       </div>
 
       <div className="mt-8">
-        <div className="mt-8">
-          <h3 className="font-medium text-zinc-900">
-            Transformation history
-          </h3>
+        <h3 className="font-medium text-zinc-900">
+          Transformation history
+        </h3>
 
-          {isTransformationsLoading ? (
-            <p className="mt-3 text-sm text-zinc-500">
-              Loading transformations...
-            </p>
-          ) : error ? (
-            <p className="mt-3 text-sm text-red-600">
-              Transformations could not be loaded.
-            </p>
-          ) : (
-            <TransformationHistory
-              datasetId={datasetId}
-              transformations={transformations ?? []}
-            />
-          )}
-        </div>
+        {isTransformationsLoading ? (
+          <p className="mt-3 text-sm text-zinc-500">
+            Loading transformations...
+          </p>
+        ) : transformationsError ? (
+          <p className="mt-3 text-sm text-red-600">
+            Transformations could not be loaded.
+          </p>
+        ) : (
+          <TransformationHistory
+            datasetId={datasetId}
+            transformations={transformations ?? []}
+          />
+        )}
       </div>
     </section>
   );

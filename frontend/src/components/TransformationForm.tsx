@@ -1,12 +1,11 @@
 import { useState } from "react";
 
-import type { ColumnAnalysis } from "../schemas/dataset";
 import type { TransformationType } from "../schemas/transformation";
 import { useCreateTransformation } from "../hooks/useTransformations";
 
 interface TransformationFormProps {
   datasetId: string;
-  columns: ColumnAnalysis[];
+  columns: string[];
 }
 
 export function TransformationForm({
@@ -123,8 +122,8 @@ export function TransformationForm({
           <option value="">Select a column</option>
 
           {columns.map((column) => (
-            <option key={column.name} value={column.name}>
-              {column.name}
+            <option key={column} value={column}>
+              {column}
             </option>
           ))}
         </select>

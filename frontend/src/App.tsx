@@ -5,6 +5,8 @@ import { DatasetOverviewPage } from "./routes/DatasetOverviewPage";
 import { DatasetExplorePage } from "./routes/DatasetExplorerPage";
 import { DatasetLayout } from "./routes/DatasetLayout";
 import { DatasetCleanPage } from "./routes/DatasetCleanPage";
+import { DatasetExportPage } from "./routes/DatasetExportPage";
+import { DatasetVisualizePage } from "./routes/DataVisualizePage";
 
 export default function App() {
   return (
@@ -26,6 +28,14 @@ export default function App() {
         <Route
           path="clean"
           element={<DatasetCleanPage />}
+        />
+        <Route
+          path="export"
+          element={<DatasetExportPage />}
+        />
+        <Route
+          path="visualize"
+          element={<DatasetVisualizePage />}
         />
       </Route>
     </Routes>

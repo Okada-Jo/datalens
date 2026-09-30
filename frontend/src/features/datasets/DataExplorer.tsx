@@ -28,14 +28,15 @@ export default function DataExplorer({
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("search") ?? "";
 
-  const [searchInput, setSearchInput] =
-    useState(search);
+  const [searchInput, setSearchInput] = useState(search);
 
   const page = Math.max(
     Number(searchParams.get("page")) || 1,
     1,
   );
+
   const sortColumn = searchParams.get("sort");
+
   const sortDirection =
     searchParams.get("direction") === "desc"
       ? "desc"
@@ -47,9 +48,11 @@ export default function DataExplorer({
         direction: sortDirection,
       }
     : null;
+
   const filters = parseFilters(
     searchParams.get("filters"),
   );
+
   const {
     data,
     isLoading,
@@ -64,49 +67,33 @@ export default function DataExplorer({
     search,
   );
 
-  function parseFilters(
-    value: string | null,
-  ): DatasetFilter[] {
-    if (!value) {
-      return [];
-    }
+  const updateSearchParams = useCallback(
+    (
+      updates: Record<string, string | null>,
+    ) => {
+      setSearchParams((current) => {
+        const next = new URLSearchParams(current);
 
-    try {
-      const parsed = JSON.parse(value);
-
-      return Array.isArray(parsed)
-        ? parsed
-        : [];
-    } catch {
-      return [];
-    }
-  }
-
-  const updateSearchParams = useCallback((
-    updates: Record<string, string | null>,
-  ) => {
-    setSearchParams((current) => {
-      const next = new URLSearchParams(current);
-
-      for (const [key, value] of Object.entries(
-        updates,
-      )) {
-        if (value === null) {
-          next.delete(key);
-        } else {
-          next.set(key, value);
+        for (const [key, value] of Object.entries(
+          updates,
+        )) {
+          if (value === null) {
+            next.delete(key);
+          } else {
+            next.set(key, value);
+          }
         }
-      }
 
-      return next;
-    });
-  }, [setSearchParams]);
+        return next;
+      });
+    },
+    [setSearchParams],
+  );
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
       updateSearchParams({
-        search:
-          searchInput.trim() || null,
+        search: searchInput.trim() || null,
         page: null,
       });
     }, 400);
@@ -208,6 +195,31 @@ export default function DataExplorer({
     );
   }
 
+  /*
+   * The original analysis contains useful metadata such as
+   * semantic column types, but the rows endpoint contains the
+   * authoritative transformed column names.
+   *
+   * Unchanged columns keep their original metadata.
+   */
+  const tableColumns = data.columns.map((columnName) => {
+    const originalColumn = columns.find(
+      (column) => column.name === columnName,
+    );
+
+    if (originalColumn) {
+      return originalColumn;
+    }
+
+    return {
+      name: columnName,
+      type: "text",
+      missing_count: 0,
+      missing_percentage: 0,
+      unique_count: 0,
+    } satisfies ColumnAnalysis;
+  });
+
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-4">
@@ -241,14 +253,17 @@ export default function DataExplorer({
           )}
         </div>
       </div>
+
       <div
         className={[
           "transition-opacity",
-          isFetching ? "opacity-60" : "opacity-100",
+          isFetching
+            ? "opacity-60"
+            : "opacity-100",
         ].join(" ")}
       >
         <DataTable
-          columns={columns}
+          columns={tableColumns}
           rows={data.rows}
           sort={sort}
           filters={filters}
@@ -273,7 +288,9 @@ export default function DataExplorer({
             onClick={() =>
               handlePageChange(page - 1)
             }
-            disabled={page === 1 || isFetching}
+            disabled={
+              page === 1 || isFetching
+            }
             className="rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
             aria-label="Previous page"
           >
@@ -281,7 +298,8 @@ export default function DataExplorer({
           </button>
 
           <span className="min-w-24 text-center text-sm text-zinc-500">
-            Page {data.page} of {data.totalPages}
+            Page {data.page} of{" "}
+            {data.totalPages}
           </span>
 
           <button
@@ -290,7 +308,8 @@ export default function DataExplorer({
               handlePageChange(page + 1)
             }
             disabled={
-              page >= data.totalPages || isFetching
+              page >= data.totalPages ||
+              isFetching
             }
             className="rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
             aria-label="Next page"
@@ -301,4 +320,22 @@ export default function DataExplorer({
       </div>
     </div>
   );
+}
+
+function parseFilters(
+  value: string | null,
+): DatasetFilter[] {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(value);
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+  } catch {
+    return [];
+  }
 }

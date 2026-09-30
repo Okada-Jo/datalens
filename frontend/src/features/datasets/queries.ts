@@ -1,6 +1,7 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import { getDataset, getDatasetRows, getDatasets, type DatasetFilter, type DatasetSort } from "../../lib/api";
+import { getDataset, getDatasetChart, getDatasetRows, getDatasets, type DatasetFilter, type DatasetSort } from "../../lib/api";
+import type { ChartAggregation } from "../../schemas/chart";
 
 export function useDatasets() {
   return useQuery({
@@ -53,5 +54,47 @@ export function useDatasetRows(
       ),
     enabled: Boolean(id),
     placeholderData: keepPreviousData,
+  });
+}
+
+export function useDatasetChart(
+  datasetId: string | undefined,
+  x: string,
+  y: string,
+  aggregation: ChartAggregation,
+) {
+  return useQuery({
+    queryKey: [
+      "datasets",
+      datasetId,
+      "chart",
+      x,
+      y,
+      aggregation,
+    ],
+
+    queryFn: () => {
+      if (!datasetId) {
+        throw new Error(
+          "Dataset ID is required.",
+        );
+      }
+
+      return getDatasetChart(
+        datasetId,
+        x,
+        y,
+        aggregation,
+      );
+    },
+
+    enabled: Boolean(
+      datasetId &&
+      x &&
+      (
+        aggregation === "count" ||
+        y
+      ),
+    ),
   });
 }

@@ -1,8 +1,11 @@
+import { chartResponseSchema, type ChartAggregation, type ChartResponse } from "../schemas/chart";
 import { datasetSchema, datasetsSchema } from "../schemas/dataset";
 import { datasetRowsSchema } from "../schemas/datasetRows";
 import { transformationSchema, transformationsSchema, type TransformationType } from "../schemas/transformation";
 
 const API_URL = "http://localhost:8000/api";
+
+export type ExportFormat = "csv" | "json";
 
 export type SortDirection = "asc" | "desc";
 
@@ -185,4 +188,41 @@ export async function deleteTransformation(
       "Failed to delete transformation.",
     );
   }
+}
+
+export function getDatasetExportUrl(
+  datasetId: string,
+  format: ExportFormat,
+): string {
+  return `${API_URL}/datasets/${datasetId}/export/?type=${format}`;
+}
+
+export async function getDatasetChart(
+  datasetId: string,
+  x: string,
+  y: string,
+  aggregation: ChartAggregation,
+): Promise<ChartResponse> {
+  const params = new URLSearchParams({
+    x,
+    aggregation,
+  });
+
+  if (aggregation !== "count" && y) {
+    params.set("y", y);
+  }
+
+  const response = await fetch(
+    `${API_URL}/datasets/${datasetId}/chart/?${params}`,
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Dataset chart could not be loaded.",
+    );
+  }
+
+  const data = await response.json();
+
+  return chartResponseSchema.parse(data);
 }

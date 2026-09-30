@@ -2,6 +2,8 @@ from pathlib import Path
 
 import json
 
+from django.http import HttpResponse
+
 from rest_framework.decorators import action
 
 from rest_framework import status, viewsets
@@ -12,6 +14,9 @@ from .models import Dataset
 from .serializers import DatasetSerializer, TransformationSerializer
 from .services.analysis import analyze_csv
 from .services.query import query_dataset
+from .services.export import build_export_dataframe
+from .services.chart import build_chart_data
+
 
 MAX_FILE_SIZE = 25 * 1024 * 1024
 
@@ -282,3 +287,125 @@ class DatasetViewSet(viewsets.ModelViewSet):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path="export",
+    )
+    def export_dataset(self, request, pk=None):
+        dataset = self.get_object()
+
+        export_format = request.query_params.get(
+            "type",
+            "csv",
+        ).lower()
+
+        if export_format not in {"csv", "json"}:
+            return Response(
+                {
+                    "detail": (
+                        "Unsupported export format. "
+                        "Use csv or json."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        transformations = (
+            dataset.transformations
+            .all()
+            .order_by("position")
+        )
+
+        df = build_export_dataframe(
+            dataset.file.path,
+            transformations,
+        )
+
+        filename = dataset.name
+
+        if export_format == "csv":
+            response = HttpResponse(
+                df.to_csv(index=False),
+                content_type="text/csv",
+            )
+
+            response["Content-Disposition"] = (
+                f'attachment; filename="{filename}.csv"'
+            )
+
+            return response
+
+        response = HttpResponse(
+            df.to_json(
+                orient="records",
+                date_format="iso",
+                indent=2,
+            ),
+            content_type="application/json",
+        )
+
+        response["Content-Disposition"] = (
+            f'attachment; filename="{filename}.json"'
+        )
+
+        return response
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path="chart",
+    )
+    def chart(self, request, pk=None):
+        dataset = self.get_object()
+
+        x_column = request.query_params.get("x")
+        y_column = request.query_params.get("y")
+        aggregation = request.query_params.get(
+            "aggregation",
+            "sum",
+        )
+
+        if not x_column:
+            return Response(
+                {
+                    "detail": (
+                        "The x query parameter is required."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if aggregation != "count" and not y_column:
+            return Response(
+                {
+                    "detail": (
+                        "The y query parameter is required "
+                        "for sum and average."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        transformations = (
+            dataset.transformations
+            .all()
+            .order_by("position")
+        )
+
+        try:
+            result = build_chart_data(
+                dataset.file.path,
+                transformations,
+                x_column,
+                y_column,
+                aggregation,
+            )
+        except ValueError as exc:
+            return Response(
+                {"detail": str(exc)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(result)
