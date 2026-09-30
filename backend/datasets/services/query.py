@@ -2,6 +2,8 @@ import math
 
 import pandas as pd
 
+from .transformations import apply_transformations
+
 
 TEXT_OPERATORS = {"contains", "equals"}
 NUMBER_OPERATORS = {
@@ -22,8 +24,14 @@ def query_dataset(
     sort_direction: str,
     filters: list[dict],
     search: str | None,
+    transformations,
 ) -> dict:
     df = pd.read_csv(file_path)
+
+    df = apply_transformations(
+        df,
+        transformations,
+    )
 
     df = apply_search(df, search)
     df = apply_filters(df, filters)

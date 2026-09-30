@@ -1,5 +1,6 @@
 import { datasetSchema, datasetsSchema } from "../schemas/dataset";
 import { datasetRowsSchema } from "../schemas/datasetRows";
+import { transformationSchema, transformationsSchema, type TransformationType } from "../schemas/transformation";
 
 const API_URL = "http://localhost:8000/api";
 
@@ -24,6 +25,11 @@ export interface DatasetFilter {
 export interface DatasetSort {
   column: string;
   direction: SortDirection;
+}
+
+export interface CreateTransformationInput {
+  type: TransformationType;
+  config: Record<string, unknown>;
 }
 
 export async function getDatasets() {
@@ -117,4 +123,66 @@ export async function getDatasetRows(
   const data: unknown = await response.json();
 
   return datasetRowsSchema.parse(data);
+}
+
+export async function getTransformations(
+  datasetId: string,
+) {
+  const response = await fetch(
+    `${API_URL}/datasets/${datasetId}/transformations/`,
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load transformations.",
+    );
+  }
+
+  const data = await response.json();
+
+  return transformationsSchema.parse(data);
+}
+
+export async function createTransformation(
+  datasetId: string,
+  input: CreateTransformationInput,
+) {
+  const response = await fetch(
+    `${API_URL}/datasets/${datasetId}/transformations/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(input),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to create transformation.",
+    );
+  }
+
+  const data = await response.json();
+
+  return transformationSchema.parse(data);
+}
+
+export async function deleteTransformation(
+  datasetId: string,
+  transformationId: string,
+) {
+  const response = await fetch(
+    `${API_URL}/datasets/${datasetId}/transformations/${transformationId}/`,
+    {
+      method: "DELETE",
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to delete transformation.",
+    );
+  }
 }

@@ -5,11 +5,11 @@ import json
 from rest_framework.decorators import action
 
 from rest_framework import status, viewsets
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
 from .models import Dataset
-from .serializers import DatasetSerializer
+from .serializers import DatasetSerializer, TransformationSerializer
 from .services.analysis import analyze_csv
 from .services.query import query_dataset
 
@@ -18,7 +18,7 @@ MAX_FILE_SIZE = 25 * 1024 * 1024
 class DatasetViewSet(viewsets.ModelViewSet):
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def create(self, request, *args, **kwargs):
         uploaded_file = request.FILES.get("file")
@@ -82,6 +82,94 @@ class DatasetViewSet(viewsets.ModelViewSet):
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED,
+        )
+
+    @action(
+        detail=True,
+        methods=["get", "post"],
+        url_path="transformations",
+    )
+    def transformations(self, request, pk=None):
+        dataset = self.get_object()
+
+        if request.method == "GET":
+            transformations = (
+                dataset.transformations
+                .all()
+                .order_by("position")
+            )
+
+            serializer = TransformationSerializer(
+                transformations,
+                many=True,
+            )
+
+            return Response(serializer.data)
+
+        serializer = TransformationSerializer(
+            data=request.data,
+        )
+
+        serializer.is_valid(
+            raise_exception=True,
+        )
+
+        last_transformation = (
+            dataset.transformations
+            .order_by("-position")
+            .first()
+        )
+
+        next_position = (
+            last_transformation.position + 1
+            if last_transformation
+            else 1
+        )
+
+        transformation = serializer.save(
+            dataset=dataset,
+            position=next_position,
+        )
+
+        return Response(
+            TransformationSerializer(
+                transformation,
+            ).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    @action(
+        detail=True,
+        methods=["delete"],
+        url_path=r"transformations/(?P<transformation_id>[^/.]+)",
+    )
+    def delete_transformation(
+        self,
+        request,
+        pk=None,
+        transformation_id=None,
+    ):
+        dataset = self.get_object()
+
+        try:
+            transformation = (
+                dataset.transformations
+                .get(id=transformation_id)
+            )
+        except Transformation.DoesNotExist:
+            return Response(
+                {
+                    "detail": (
+                        "Transformation not found."
+                    )
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        transformation.delete()
+
+        return Response(
+            status=status.HTTP_204_NO_CONTENT,
         )
     
     @action(detail=True, methods=["get"])
@@ -157,6 +245,11 @@ class DatasetViewSet(viewsets.ModelViewSet):
             )
 
         try:
+            transformations = (
+                dataset.transformations
+                .all()
+                .order_by("position")
+            )
             result = query_dataset(
                 dataset.file.path,
                 page=page,
@@ -165,6 +258,7 @@ class DatasetViewSet(viewsets.ModelViewSet):
                 sort_direction=sort_direction,
                 filters=filters,
                 search=search,
+                transformations=transformations,
             )
 
             return Response(result)
