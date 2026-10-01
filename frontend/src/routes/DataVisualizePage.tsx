@@ -1,4 +1,5 @@
 import { formatDecimal } from "../lib/format";
+import { chartWindow } from "../lib/chartWindow";
 import { gettext as t, useLocale } from "../i18n";
 import { DataError } from "../components/DataError";
 import { useState } from "react";
@@ -224,7 +225,8 @@ export function DatasetVisualizePage() {
                   {t("{count} data points", { count: chart.data.length })}</p>
               </div>
 
-              <Chart
+              <WindowedChart
+                key={JSON.stringify([datasetId, chart.x, chart.y, chart.aggregation])}
                 type={chartType}
                 data={chart.data}
               />
@@ -299,6 +301,45 @@ interface ChartProps {
   }>;
 }
 
+function WindowedChart({ type, data }: ChartProps) {
+  useLocale();
+  const [requestedPage, setPage] = useState(0);
+  const window = chartWindow(data, requestedPage);
+
+  return (
+    <>
+      {window.pageCount > 1 && (
+        <div className="mb-4 space-y-2">
+          <p className="text-sm text-zinc-500" aria-live="polite">
+            {t("Showing points {start}–{end} of {total}. Move through the chart to see every value.", {
+              start: window.start + 1, end: window.end, total: data.length,
+            })}
+          </p>
+          <div className="flex items-center gap-3">
+            <button type="button" className="rounded border border-zinc-200 px-3 py-1 text-sm disabled:opacity-40" disabled={window.page === 0} onClick={() => setPage(window.page - 1)}>
+              {t("Previous points")}
+            </button>
+            <input
+              type="range"
+              className="min-w-0 flex-1 cursor-pointer accent-[var(--accent-ink)]"
+              aria-label={t("Chart position")}
+              min={0}
+              max={window.pageCount - 1}
+              step={1}
+              value={window.page}
+              onChange={(event) => setPage(Number(event.target.value))}
+            />
+            <button type="button" className="rounded border border-zinc-200 px-3 py-1 text-sm disabled:opacity-40" disabled={window.page === window.pageCount - 1} onClick={() => setPage(window.page + 1)}>
+              {t("Next points")}
+            </button>
+          </div>
+        </div>
+      )}
+      <Chart type={type} data={window.data} />
+    </>
+  );
+}
+
 function Chart({
   type,
   data,
@@ -340,6 +381,8 @@ function Chart({
             <Tooltip contentStyle={{ background: "var(--surface)", borderColor: "var(--color-zinc-200)", borderRadius: 12, color: "var(--color-zinc-900)" }} itemStyle={{ color: "var(--accent-ink)" }} cursor={{ stroke: "var(--color-zinc-300)", fill: "var(--accent-soft)" }} />
 
             <Line
+              isAnimationActive={false}
+              dot={false}
               type="monotone"
               dataKey="y"
               name={t("Value")}
@@ -377,6 +420,7 @@ function Chart({
           <Tooltip contentStyle={{ background: "var(--surface)", borderColor: "var(--color-zinc-200)", borderRadius: 12, color: "var(--color-zinc-900)" }} itemStyle={{ color: "var(--accent-ink)" }} cursor={{ stroke: "var(--color-zinc-300)", fill: "var(--accent-soft)" }} />
 
           <Bar
+            isAnimationActive={false}
             dataKey="y"
               name={t("Value")}
             fill="var(--accent-ink)"

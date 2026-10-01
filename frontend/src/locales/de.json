@@ -220,5 +220,9 @@
   "replace_value": "Wert ersetzen",
   "delete_column": "Spalte löschen",
   "{count} matching rows": "Passende Zeilen: {count}",
-  "{count} rows": "Zeilen: {count}"
+  "{count} rows": "Zeilen: {count}",
+  "Showing points {start}–{end} of {total}. Move through the chart to see every value.": "Punkte {start}–{end} von {total}. Navigiere durch das Diagramm, um jeden Wert zu sehen.",
+  "Previous points": "Vorherige Punkte",
+  "Next points": "Nächste Punkte",
+  "Chart position": "Diagrammposition"
 }

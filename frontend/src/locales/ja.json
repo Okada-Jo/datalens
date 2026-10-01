@@ -220,5 +220,9 @@
   "replace_value": "値の置換",
   "delete_column": "列の削除",
   "{count} matching rows": "一致する行：{count}",
-  "{count} rows": "行数：{count}"
+  "{count} rows": "行数：{count}",
+  "Showing points {start}–{end} of {total}. Move through the chart to see every value.": "全{total}件中{start}～{end}件を表示しています。グラフを移動すると、すべての値を確認できます。",
+  "Previous points": "前のデータ点",
+  "Next points": "次のデータ点",
+  "Chart position": "グラフの表示位置"
 }
