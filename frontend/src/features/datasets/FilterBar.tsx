@@ -98,7 +98,7 @@ export default function FilterBar({
     <div className="mb-4 space-y-3">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-wrap items-center gap-2"
+        className="flex flex-wrap items-center gap-2 p-2"
       >
         <div className="mr-1 flex items-center gap-2 text-sm text-zinc-500">
           <Filter size={15} />
@@ -159,7 +159,7 @@ export default function FilterBar({
       </form>
 
       {filters.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 px-2">
           {filters.map((filter, index) => (
             <FilterChip
               key={`${filter.column}-${filter.operator}-${filter.value ?? ""}-${index}`}
