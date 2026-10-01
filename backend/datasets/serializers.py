@@ -4,6 +4,8 @@ from .models import Dataset, Transformation
 
 
 class DatasetSerializer(serializers.ModelSerializer):
+    expiresAt = serializers.DateTimeField(source="expires_at", read_only=True)
+
     originalFilename = serializers.CharField(
         source="original_filename",
         read_only=True,
@@ -37,6 +39,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             "status",
             "analysis",
             "createdAt",
+            "expiresAt",
         ]
 
 

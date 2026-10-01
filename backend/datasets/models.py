@@ -1,9 +1,14 @@
 import uuid
+from datetime import timedelta
 
 from django.db import models
 
 
 class Dataset(models.Model):
+    @property
+    def expires_at(self):
+        return self.created_at + timedelta(hours=24)
+
     class Status(models.TextChoices):
         UPLOADED = "uploaded", "Uploaded"
         PROCESSING = "processing", "Processing"

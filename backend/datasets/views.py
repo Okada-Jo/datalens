@@ -10,7 +10,10 @@ from rest_framework import status, viewsets
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
-from .models import Dataset
+from .models import Dataset, Transformation
+from .services.retention import delete_expired_datasets
+from django.utils import timezone
+from datetime import timedelta
 from .serializers import DatasetSerializer, TransformationSerializer
 from .services.analysis import analyze_csv
 from .services.query import query_dataset
@@ -24,6 +27,13 @@ class DatasetViewSet(viewsets.ModelViewSet):
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
     parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def initial(self, request, *args, **kwargs):
+        super().initial(request, *args, **kwargs)
+        delete_expired_datasets()
+
+    def get_queryset(self):
+        return Dataset.objects.filter(created_at__gt=timezone.now() - timedelta(hours=24))
 
     def create(self, request, *args, **kwargs):
         uploaded_file = request.FILES.get("file")
