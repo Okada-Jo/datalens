@@ -6,14 +6,18 @@ Upload a CSV, inspect its structure, explore and filter the data, apply non-dest
 
 ## Screenshots
 
-> Screenshots coming after the final UI pass.
+<img width="240" height="270" alt="Screenshot 2026-10-01 191321" src="https://github.com/user-attachments/assets/99c38fef-20ba-47f5-b0a1-8ad0c1404634" />
 
-<!--
-![Overview](docs/screenshots/overview.png)
-![Explore](docs/screenshots/explore.png)
-![Clean](docs/screenshots/clean.png)
-![Visualize](docs/screenshots/visualize.png)
--->
+<img width="330" height="230" alt="Screenshot 2026-10-01 190718" src="https://github.com/user-attachments/assets/9fd73e39-bdb6-4a72-a563-fb66ca864253" />
+
+<img width="330" height="230" alt="Screenshot 2026-10-01 191003" src="https://github.com/user-attachments/assets/17ac4a57-0843-4469-9663-502b218fa772" />
+
+<img width="330" height="230" alt="Screenshot 2026-10-01 190631" src="https://github.com/user-attachments/assets/0e149b0a-8e27-4473-93f9-39e98f8651f7" />
+
+<img width="330" height="180" alt="Screenshot 2026-10-01 191042" src="https://github.com/user-attachments/assets/603ba59b-aeb2-4796-94ce-8678586e4c8e" />
+
+
+
 
 ## Features
 
