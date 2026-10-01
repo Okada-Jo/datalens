@@ -68,7 +68,7 @@ export default function DataTable({
   });
 
   return (
-    <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white">
+    <div className="overflow-hidden rounded-xl border border-zinc-200 bg-surface">
       <FilterBar
         columns={columns}
         filters={filters}

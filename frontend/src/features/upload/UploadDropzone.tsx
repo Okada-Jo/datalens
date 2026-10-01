@@ -84,7 +84,7 @@ export default function UploadDropzone({
 
   if (file) {
     return (
-      <div className="rounded-xl border border-zinc-200 bg-white p-5">
+      <div className="rounded-xl border border-zinc-200 bg-surface p-5">
         <div className="flex items-center gap-4">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
             <FileSpreadsheet size={22} />
@@ -117,6 +117,16 @@ export default function UploadDropzone({
   return (
     <div>
       <div
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        aria-label="Choose a CSV file"
+        aria-disabled={disabled}
+        onKeyDown={(event) => {
+          if (!disabled && (event.key === "Enter" || event.key === " ")) {
+            event.preventDefault();
+            inputRef.current?.click();
+          }
+        }}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -129,7 +139,7 @@ export default function UploadDropzone({
           "flex min-h-64 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-8 py-12 text-center transition",
           isDragging
             ? "border-zinc-900 bg-zinc-50"
-            : "border-zinc-300 bg-white hover:border-zinc-400 hover:bg-zinc-50/50",
+            : "border-zinc-300 bg-surface hover:border-zinc-400 hover:bg-zinc-50/50",
           disabled
             ? "cursor-not-allowed opacity-60"
             : "",

@@ -26,7 +26,8 @@ Upload a CSV, inspect its structure, explore and filter the data, apply non-dest
 - Ordered transformation history with undo
 - Bar and line charts with sum, average, and count aggregations
 - CSV and JSON export
-- Original uploaded files remain unchanged
+- Original uploaded files remain unchanged until automatic deletion after 24 hours
+- Light, dark, and system themes
 
 ## Tech Stack
 
@@ -90,6 +91,16 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+Run the retention worker in a separate terminal (required for deletion while idle):
+
+```bash
+cd backend
+source .venv/bin/activate
+python manage.py cleanup_datasets --watch
+```
+
+Docker Compose starts this worker automatically. Uploads expire 24 hours after creation, including failed uploads. The API refuses expired datasets immediately; the worker removes files, analysis, and transformations on its next sweep (every second). Keep the worker running: downtime or storage failures delay physical deletion until recovery. Downloads already saved by users are outside this policy. For a one-off sweep, run `python manage.py cleanup_datasets`.
+
 Frontend:
 
 ```bash
@@ -108,7 +119,7 @@ See `frontend/.env.example`.
 
 ## Tests
 
-The backend has 30 automated tests covering the transformation pipeline, querying, exports, chart aggregation, models, and API behavior.
+The backend has 37 automated tests covering the transformation pipeline, querying, exports, chart aggregation, models, and API behavior.
 
 ```bash
 cd backend

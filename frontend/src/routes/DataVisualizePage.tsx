@@ -94,7 +94,7 @@ export function DatasetVisualizePage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
+        <div className="rounded-xl border border-zinc-200 bg-surface p-4">
           <h3 className="font-medium text-zinc-900">
             Chart settings
           </h3>
@@ -184,7 +184,7 @@ export function DatasetVisualizePage() {
           )}
         </div>
 
-        <div className="min-h-[440px] rounded-xl border border-zinc-200 bg-white p-5">
+        <div className="min-h-[440px] rounded-xl border border-zinc-200 bg-surface p-5">
           {!canRenderChart ? (
             <EmptyChart />
           ) : isChartLoading ? (
@@ -265,7 +265,7 @@ function SelectField({
         onChange={(event) =>
           onChange(event.target.value)
         }
-        className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 outline-none focus:border-zinc-400"
+        className="w-full rounded-lg border border-zinc-200 bg-surface px-3 py-2 text-sm text-zinc-700 outline-none focus:border-zinc-400"
       >
         {placeholder && (
           <option value="">
@@ -330,12 +330,12 @@ function Chart({
               tick={{ fontSize: 12 }}
             />
 
-            <Tooltip />
+            <Tooltip contentStyle={{ background: "var(--surface)", borderColor: "var(--color-zinc-200)", borderRadius: 12, color: "var(--color-zinc-900)" }} itemStyle={{ color: "var(--accent-ink)" }} cursor={{ stroke: "var(--color-zinc-300)", fill: "var(--accent-soft)" }} />
 
             <Line
               type="monotone"
               dataKey="y"
-              stroke="currentColor"
+              stroke="var(--accent-ink)"
               strokeWidth={2}
             />
           </LineChart>
@@ -365,11 +365,11 @@ function Chart({
             tick={{ fontSize: 12 }}
           />
 
-          <Tooltip />
+          <Tooltip contentStyle={{ background: "var(--surface)", borderColor: "var(--color-zinc-200)", borderRadius: 12, color: "var(--color-zinc-900)" }} itemStyle={{ color: "var(--accent-ink)" }} cursor={{ stroke: "var(--color-zinc-300)", fill: "var(--accent-soft)" }} />
 
           <Bar
             dataKey="y"
-            fill="currentColor"
+            fill="var(--accent-ink)"
           />
         </BarChart>
       </ResponsiveContainer>

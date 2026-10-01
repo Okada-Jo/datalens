@@ -68,6 +68,7 @@ export const datasetSchema = z.object({
   status: datasetStatusSchema,
   analysis: datasetAnalysisSchema.or(z.object({})),
   createdAt: z.string(),
+  expiresAt: z.string(),
 });
 
 export const datasetsSchema = z.array(datasetSchema);

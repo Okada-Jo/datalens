@@ -108,7 +108,7 @@ export default function FilterBar({
           onChange={(event) =>
             setColumnName(event.target.value)
           }
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 outline-none focus:border-zinc-400"
+          className="rounded-lg border border-zinc-200 bg-surface px-3 py-2 text-sm text-zinc-700 outline-none focus:border-zinc-400"
         >
           {columns.map((column) => (
             <option
@@ -127,7 +127,7 @@ export default function FilterBar({
               event.target.value as FilterOperator,
             )
           }
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 outline-none focus:border-zinc-400"
+          className="rounded-lg border border-zinc-200 bg-surface px-3 py-2 text-sm text-zinc-700 outline-none focus:border-zinc-400"
         >
           {operators.map((option) => (
             <option
@@ -146,13 +146,13 @@ export default function FilterBar({
               setValue(event.target.value)
             }
             placeholder="Value"
-            className="w-48 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 outline-none placeholder:text-zinc-400 focus:border-zinc-400"
+            className="w-48 rounded-lg border border-zinc-200 bg-surface px-3 py-2 text-sm text-zinc-700 outline-none placeholder:text-zinc-400 focus:border-zinc-400"
           />
         )}
 
         <button
           type="submit"
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700"
+          className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
         >
           Add filter
         </button>

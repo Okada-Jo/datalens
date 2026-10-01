@@ -236,7 +236,7 @@ export default function DataExplorer({
               setSearchInput(event.target.value)
             }
             placeholder="Search all columns..."
-            className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-9 text-sm text-zinc-700 outline-none placeholder:text-zinc-400 focus:border-zinc-400"
+            className="w-full rounded-lg border border-zinc-200 bg-surface py-2 pl-9 pr-9 text-sm text-zinc-700 outline-none placeholder:text-zinc-400 focus:border-zinc-400"
           />
 
           {searchInput && (
@@ -291,7 +291,7 @@ export default function DataExplorer({
             disabled={
               page === 1 || isFetching
             }
-            className="rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-lg border border-zinc-200 bg-surface p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
             aria-label="Previous page"
           >
             <ChevronLeft size={17} />
@@ -311,7 +311,7 @@ export default function DataExplorer({
               page >= data.totalPages ||
               isFetching
             }
-            className="rounded-lg border border-zinc-200 bg-white p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-lg border border-zinc-200 bg-surface p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
             aria-label="Next page"
           >
             <ChevronRight size={17} />

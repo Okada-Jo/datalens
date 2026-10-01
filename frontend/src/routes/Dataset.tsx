@@ -49,7 +49,7 @@ export default function DatasetPage() {
 
   return (
     <main className="min-h-screen bg-zinc-50">
-      <header className="border-b border-zinc-200 bg-white">
+      <header className="border-b border-zinc-200 bg-surface">
         <div className="mx-auto flex h-16 max-w-6xl items-center px-6">
           <Link
             to="/"

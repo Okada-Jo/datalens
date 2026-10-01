@@ -34,7 +34,7 @@ export default function DatasetOverview({
     <div className="mx-auto max-w-8xl px-4 py-4">
       <div className="mb-8 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600">
+          <div className="flex size-11 items-center justify-center rounded-xl border border-zinc-200 bg-surface text-zinc-600">
             <FileSpreadsheet size={21} />
           </div>
 
@@ -51,7 +51,7 @@ export default function DatasetOverview({
         <div>
           <Link
             to={`/datasets/${dataset.id}/explore`}
-            className="inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
             >
             Explore data
             <ArrowRight size={16} />
@@ -122,7 +122,7 @@ function MetricCard({
   value,
 }: MetricCardProps) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5">
+    <div className="rounded-xl border border-zinc-200 bg-surface p-5">
       <div className="flex items-center gap-2 text-zinc-400">
         {icon}
 

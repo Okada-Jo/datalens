@@ -56,7 +56,7 @@ export default function ColumnCard({
   const type = typeConfig[column.type];
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5">
+    <div className="rounded-xl border border-zinc-200 bg-surface p-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h3 className="truncate font-medium text-zinc-900">

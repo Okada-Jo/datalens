@@ -79,7 +79,7 @@ export function FillMissingForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-xl border border-zinc-200 bg-white p-5"
+      className="rounded-xl border border-zinc-200 bg-surface p-5"
     >
       <div>
         <h3 className="font-medium text-zinc-900">
@@ -102,7 +102,7 @@ export function FillMissingForm({
             onChange={(event) =>
               setColumnName(event.target.value)
             }
-            className="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm"
+            className="mt-2 w-full rounded-lg border border-zinc-300 bg-surface px-3 py-2 text-sm"
           >
             {columns.map((column) => (
               <option
@@ -145,7 +145,7 @@ export function FillMissingForm({
             value === "" ||
             createTransformation.isPending
           }
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
         >
           {createTransformation.isPending
             ? "Applying..."

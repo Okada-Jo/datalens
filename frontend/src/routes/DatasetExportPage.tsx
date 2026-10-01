@@ -77,7 +77,7 @@ function ExportCard({
   onDownload,
 }: ExportCardProps) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5">
+    <div className="rounded-xl border border-zinc-200 bg-surface p-5">
       <div className="flex items-center gap-2 text-zinc-900">
         {icon}
 
@@ -93,7 +93,7 @@ function ExportCard({
       <button
         type="button"
         onClick={onDownload}
-        className="mt-5 inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700"
+        className="mt-5 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
       >
         <Download size={15} />
         Download {title}

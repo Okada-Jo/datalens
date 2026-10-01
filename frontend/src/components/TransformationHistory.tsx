@@ -31,7 +31,7 @@ export function TransformationHistory({
       {transformations.map((transformation, index) => (
         <div
           key={transformation.id}
-          className="flex items-center justify-between gap-4 rounded-lg border border-zinc-200 bg-white p-4"
+          className="flex items-center justify-between gap-4 rounded-lg border border-zinc-200 bg-surface p-4"
         >
           <div>
             <p className="text-sm font-medium text-zinc-900">
