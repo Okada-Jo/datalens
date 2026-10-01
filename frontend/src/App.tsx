@@ -1,3 +1,4 @@
+import { useLocale } from "./i18n";
 import { Route, Routes } from "react-router-dom";
 
 import HomePage from "./routes/Home";
@@ -9,6 +10,7 @@ import { DatasetExportPage } from "./routes/DatasetExportPage";
 import { DatasetVisualizePage } from "./routes/DataVisualizePage";
 
 export default function App() {
+  useLocale();
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />

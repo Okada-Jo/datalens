@@ -1,3 +1,4 @@
+import { gettext as t, translateMessage, useLocale } from "../i18n";
 import { AlertTriangle } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function DataError({ title, error, children }: Props) {
+  useLocale();
   const message = error instanceof TypeError
     ? "Could not reach the server. Check your connection and try again."
     : error?.message || "Please try again.";
@@ -15,8 +17,8 @@ export function DataError({ title, error, children }: Props) {
     <div className="flex items-start gap-3">
       <AlertTriangle size={19} className="mt-0.5 shrink-0" />
       <div className="min-w-0">
-        <h3 className="font-semibold">{title}</h3>
-        <p className="mt-1 whitespace-pre-wrap break-words leading-6">{message}</p>
+        <h3 className="font-semibold">{t(title)}</h3>
+        <p className="mt-1 whitespace-pre-wrap break-words leading-6">{translateMessage(message)}</p>
         {children && <div className="mt-3 flex flex-wrap items-center gap-4">{children}</div>}
       </div>
     </div>

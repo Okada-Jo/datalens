@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../i18n";
 import {
   useEffect,
   useState,
@@ -19,6 +20,7 @@ export function FillMissingForm({
   datasetId,
   columns,
 }: FillMissingFormProps) {
+  useLocale();
   const [columnName, setColumnName] = useState(
     columns[0]?.name ?? "",
   );
@@ -83,19 +85,16 @@ export function FillMissingForm({
     >
       <div>
         <h3 className="font-medium text-zinc-900">
-          Fill missing values
-        </h3>
+          {t("Fill missing values")}</h3>
 
         <p className="mt-1 text-sm text-zinc-500">
-          Replace empty values in a column with a constant value.
-        </p>
+          {t("Replace empty values in a column with a constant value.")}</p>
       </div>
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="text-sm font-medium text-zinc-700">
-            Column
-          </span>
+            {t("Column")}</span>
 
           <select
             value={columnName}
@@ -117,15 +116,14 @@ export function FillMissingForm({
 
         <label className="block">
           <span className="text-sm font-medium text-zinc-700">
-            Replacement value
-          </span>
+            {t("Replacement value")}</span>
 
           <input
             value={value}
             onChange={(event) =>
               setValue(event.target.value)
             }
-            placeholder="e.g. 0"
+            placeholder={t("e.g. 0")}
             className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
           />
         </label>
@@ -134,8 +132,7 @@ export function FillMissingForm({
       <div className="mt-5 flex items-center justify-end gap-3">
         {createTransformation.isError && (
           <p className="text-sm text-red-600">
-            Transformation could not be applied.
-          </p>
+            {t("Transformation could not be applied.")}</p>
         )}
 
         <button
@@ -148,8 +145,8 @@ export function FillMissingForm({
           className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
         >
           {createTransformation.isPending
-            ? "Applying..."
-            : "Apply"}
+            ? t("Applying...")
+            : t("Apply")}
         </button>
       </div>
     </form>

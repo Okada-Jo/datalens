@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../../i18n";
 import { Filter, X } from "lucide-react";
 import {
   useEffect,
@@ -29,6 +30,7 @@ export default function FilterBar({
   onRemoveFilter,
   onClearFilters,
 }: FilterBarProps) {
+  useLocale();
   const [columnName, setColumnName] = useState(
     columns[0]?.name ?? "",
   );
@@ -100,8 +102,7 @@ export default function FilterBar({
       >
         <div className="mr-1 flex items-center gap-2 text-sm text-zinc-500">
           <Filter size={15} />
-          Filter
-        </div>
+          {t("Filter")}</div>
 
         <select
           value={columnName}
@@ -134,7 +135,7 @@ export default function FilterBar({
               key={option.value}
               value={option.value}
             >
-              {option.label}
+              {t(option.label)}
             </option>
           ))}
         </select>
@@ -145,7 +146,7 @@ export default function FilterBar({
             onChange={(event) =>
               setValue(event.target.value)
             }
-            placeholder="Value"
+            placeholder={t("Value")}
             className="w-48 rounded-lg border border-zinc-200 bg-surface px-3 py-2 text-sm text-zinc-700 outline-none placeholder:text-zinc-400 focus:border-zinc-400"
           />
         )}
@@ -154,8 +155,7 @@ export default function FilterBar({
           type="submit"
           className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
         >
-          Add filter
-        </button>
+          {t("Add filter")}</button>
       </form>
 
       {filters.length > 0 && (
@@ -174,8 +174,7 @@ export default function FilterBar({
               onClick={onClearFilters}
               className="px-2 py-1 text-xs text-zinc-400 transition hover:text-zinc-700"
             >
-              Clear all
-            </button>
+              {t("Clear all")}</button>
           )}
         </div>
       )}
@@ -190,13 +189,14 @@ function FilterChip({
   filter: DatasetFilter;
   onRemove: () => void;
 }) {
+  useLocale();
   return (
     <div className="flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 py-1 pl-3 pr-1 text-xs text-zinc-600">
       <span>
         <span className="font-medium text-zinc-800">
           {filter.column}
         </span>{" "}
-        {operatorLabel(filter.operator)}
+        {t(operatorLabel(filter.operator))}
         {filter.value !== undefined && (
           <>
             {" "}
@@ -211,7 +211,7 @@ function FilterChip({
         type="button"
         onClick={onRemove}
         className="flex size-5 items-center justify-center rounded-full text-zinc-400 transition hover:bg-zinc-200 hover:text-zinc-700"
-        aria-label={`Remove ${filter.column} filter`}
+        aria-label={t("Remove {column} filter", { column: filter.column })}
       >
         <X size={12} />
       </button>

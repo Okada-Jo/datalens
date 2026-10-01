@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../i18n";
 import { useState } from "react";
 
 import type { TransformationType } from "../schemas/transformation";
@@ -12,6 +13,7 @@ export function TransformationForm({
   datasetId,
   columns,
 }: TransformationFormProps) {
+  useLocale();
   const createTransformation = useCreateTransformation(datasetId);
 
   const [type, setType] =
@@ -86,8 +88,7 @@ export function TransformationForm({
           htmlFor="transformation-type"
           className="mb-1 block text-sm font-medium text-zinc-700"
         >
-          Operation
-        </label>
+          {t("Operation")}</label>
 
         <select
           id="transformation-type"
@@ -98,10 +99,10 @@ export function TransformationForm({
           }}
           className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
         >
-          <option value="fill_missing">Fill missing values</option>
-          <option value="rename_column">Rename column</option>
-          <option value="replace_value">Replace value</option>
-          <option value="delete_column">Delete column</option>
+          <option value="fill_missing">{t("Fill missing values")}</option>
+          <option value="rename_column">{t("Rename column")}</option>
+          <option value="replace_value">{t("Replace value")}</option>
+          <option value="delete_column">{t("Delete column")}</option>
         </select>
       </div>
 
@@ -110,8 +111,7 @@ export function TransformationForm({
           htmlFor="column"
           className="mb-1 block text-sm font-medium text-zinc-700"
         >
-          Column
-        </label>
+          {t("Column")}</label>
 
         <select
           id="column"
@@ -119,7 +119,7 @@ export function TransformationForm({
           onChange={(event) => setColumnName(event.target.value)}
           className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
         >
-          <option value="">Select a column</option>
+          <option value="">{t("Select a column")}</option>
 
           {columns.map((column) => (
             <option key={column} value={column}>
@@ -131,7 +131,7 @@ export function TransformationForm({
 
       {type === "fill_missing" && (
         <TextField
-          label="Replacement value"
+          label={t("Replacement value")}
           value={value}
           onChange={setValue}
         />
@@ -139,7 +139,7 @@ export function TransformationForm({
 
       {type === "rename_column" && (
         <TextField
-          label="New column name"
+          label={t("New column name")}
           value={newValue}
           onChange={setNewValue}
         />
@@ -148,13 +148,13 @@ export function TransformationForm({
       {type === "replace_value" && (
         <>
           <TextField
-            label="Value to replace"
+            label={t("Value to replace")}
             value={oldValue}
             onChange={setOldValue}
           />
 
           <TextField
-            label="New value"
+            label={t("New value")}
             value={newValue}
             onChange={setNewValue}
           />
@@ -163,8 +163,7 @@ export function TransformationForm({
 
       {type === "delete_column" && (
         <p className="text-sm text-zinc-500">
-          The selected column will be removed from the transformed dataset.
-        </p>
+          {t("The selected column will be removed from the transformed dataset.")}</p>
       )}
 
       <button
@@ -173,8 +172,8 @@ export function TransformationForm({
         className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         {createTransformation.isPending
-          ? "Applying..."
-          : "Apply transformation"}
+          ? t("Applying...")
+          : t("Apply transformation")}
       </button>
     </form>
   );
@@ -191,6 +190,7 @@ function TextField({
   value,
   onChange,
 }: TextFieldProps) {
+  useLocale();
   const id = label.toLowerCase().replaceAll(" ", "-");
 
   return (

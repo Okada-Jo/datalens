@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../i18n";
 import {
   Download,
   FileJson,
@@ -11,6 +12,7 @@ import {
 } from "../lib/api";
 
 export function DatasetExportPage() {
+  useLocale();
   const { datasetId } = useParams();
 
   if (!datasetId) {
@@ -28,25 +30,23 @@ export function DatasetExportPage() {
     <section>
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-zinc-900">
-          Export
-        </h2>
+          {t("Export")}</h2>
 
         <p className="mt-1 text-sm text-zinc-500">
-          Download the current transformed dataset.
-        </p>
+          {t("Download the current transformed dataset.")}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <ExportCard
-          title="CSV"
-          description="Download the dataset as a comma-separated values file."
+          title={t("CSV")}
+          description={t("Download the dataset as a comma-separated values file.")}
           icon={<FileSpreadsheet size={20} />}
           onDownload={() => handleDownload("csv")}
         />
 
         <ExportCard
-          title="JSON"
-          description="Download the dataset as an array of JSON objects."
+          title={t("JSON")}
+          description={t("Download the dataset as an array of JSON objects.")}
           icon={<FileJson size={20} />}
           onDownload={() => handleDownload("json")}
         />
@@ -54,10 +54,7 @@ export function DatasetExportPage() {
 
       <div className="mt-6 rounded-lg border border-zinc-200 bg-zinc-50 p-4">
         <p className="text-sm text-zinc-600">
-          Exports include all transformations currently
-          applied to the dataset. The original uploaded file
-          remains unchanged.
-        </p>
+          {t("Exports include all transformations currently applied to the dataset. The original uploaded file remains unchanged.")}</p>
       </div>
     </section>
   );
@@ -76,18 +73,19 @@ function ExportCard({
   icon,
   onDownload,
 }: ExportCardProps) {
+  useLocale();
   return (
     <div className="rounded-xl border border-zinc-200 bg-surface p-5">
       <div className="flex items-center gap-2 text-zinc-900">
         {icon}
 
         <h3 className="font-medium">
-          {title}
+          {t(title)}
         </h3>
       </div>
 
       <p className="mt-2 text-sm leading-6 text-zinc-500">
-        {description}
+        {t(description)}
       </p>
 
       <button
@@ -96,7 +94,7 @@ function ExportCard({
         className="mt-5 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
       >
         <Download size={15} />
-        Download {title}
+        {t("Download")}{t(title)}
       </button>
     </div>
   );

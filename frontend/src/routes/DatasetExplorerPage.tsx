@@ -1,9 +1,11 @@
+import { gettext as t, useLocale } from "../i18n";
 import { useParams } from "react-router-dom";
 
 import DataExplorer from "../features/datasets/DataExplorer";
 import { useDataset } from "../features/datasets/queries";
 
 export function DatasetExplorePage() {
+  useLocale();
   const { datasetId } = useParams();
 
   const {
@@ -19,16 +21,14 @@ export function DatasetExplorePage() {
   if (isLoading) {
     return (
       <p className="text-sm text-zinc-500">
-        Loading dataset...
-      </p>
+        {t("Loading dataset...")}</p>
     );
   }
 
   if (error || !dataset) {
     return (
       <p className="text-sm text-red-600">
-        Dataset could not be loaded.
-      </p>
+        {t("Dataset could not be loaded.")}</p>
     );
   }
 
@@ -41,12 +41,10 @@ export function DatasetExplorePage() {
     <section className="mx-auto max-w-8xl px-4 py-4">
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-zinc-900">
-          Explore
-        </h2>
+          {t("Explore")}</h2>
 
         <p className="mt-1 text-sm text-zinc-500">
-          Search, filter and sort the dataset.
-        </p>
+          {t("Search, filter and sort the dataset.")}</p>
       </div>
 
       <DataExplorer

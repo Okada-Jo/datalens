@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../i18n";
 import { DataError } from "../components/DataError";
 import { useParams } from "react-router-dom";
 
@@ -7,6 +8,7 @@ import { useDatasetRows } from "../features/datasets/queries";
 import { useTransformations } from "../hooks/useTransformations";
 
 export function DatasetCleanPage() {
+  useLocale();
   const { datasetId } = useParams();
 
   const {
@@ -38,26 +40,22 @@ export function DatasetCleanPage() {
     <section>
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-zinc-900">
-          Clean
-        </h2>
+          {t("Clean")}</h2>
 
         <p className="mt-1 text-sm text-zinc-500">
-          Clean and transform your dataset without modifying the original file.
-        </p>
+          {t("Clean and transform your dataset without modifying the original file.")}</p>
       </div>
 
       <div>
         <h3 className="font-medium text-zinc-900">
-          Add transformation
-        </h3>
+          {t("Add transformation")}</h3>
 
         {isRowsLoading ? (
           <p className="mt-3 text-sm text-zinc-500">
-            Loading columns...
-          </p>
+            {t("Loading columns...")}</p>
         ) : rowsError ? (
-          <div className="mt-3"><DataError title="Unable to load columns" error={rowsError}>
-            <p>Review the transformation history below and undo the step causing the error.</p>
+          <div className="mt-3"><DataError title={t("Unable to load columns")} error={rowsError}>
+            <p>{t("Review the transformation history below and undo the step causing the error.")}</p>
           </DataError></div>
         ) : (
           <TransformationForm
@@ -69,17 +67,14 @@ export function DatasetCleanPage() {
 
       <div className="mt-8">
         <h3 className="font-medium text-zinc-900">
-          Transformation history
-        </h3>
+          {t("Transformation history")}</h3>
 
         {isTransformationsLoading ? (
           <p className="mt-3 text-sm text-zinc-500">
-            Loading transformations...
-          </p>
+            {t("Loading transformations...")}</p>
         ) : transformationsError ? (
           <p className="mt-3 text-sm text-red-600">
-            Transformations could not be loaded.
-          </p>
+            {t("Transformations could not be loaded.")}</p>
         ) : (
           <TransformationHistory
             datasetId={datasetId}

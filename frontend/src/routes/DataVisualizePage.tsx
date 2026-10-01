@@ -1,3 +1,5 @@
+import { formatDecimal } from "../lib/format";
+import { gettext as t, useLocale } from "../i18n";
 import { DataError } from "../components/DataError";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -29,6 +31,7 @@ import type {
 type ChartType = "bar" | "line";
 
 export function DatasetVisualizePage() {
+  useLocale();
   const { datasetId } = useParams();
 
   const [chartType, setChartType] =
@@ -89,20 +92,16 @@ export function DatasetVisualizePage() {
     <section>
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-zinc-900">
-          Visualize
-        </h2>
+          {t("Visualize")}</h2>
 
         <p className="mt-1 text-sm text-zinc-500">
-          Build a chart from the current transformed
-          dataset.
-        </p>
+          {t("Build a chart from the current transformed dataset.")}</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <div className="rounded-xl border border-zinc-200 bg-surface p-4">
           <h3 className="font-medium text-zinc-900">
-            Chart settings
-          </h3>
+            {t("Chart settings")}</h3>
 
           {isRowsLoading ? (
             <div className="mt-4 flex items-center gap-2 text-sm text-zinc-500">
@@ -110,16 +109,15 @@ export function DatasetVisualizePage() {
                 size={16}
                 className="animate-spin"
               />
-              Loading columns...
-            </div>
+              {t("Loading columns...")}</div>
           ) : rowsError ? (
-            <div className="mt-4"><DataError title="Unable to load columns" error={rowsError}>
-              <button type="button" className="underline" disabled={isRowsFetching} onClick={() => void refetchRows()}>Try again</button>
+            <div className="mt-4"><DataError title={t("Unable to load columns")} error={rowsError}>
+              <button type="button" className="underline" disabled={isRowsFetching} onClick={() => void refetchRows()}>{t("Try again")}</button>
             </DataError></div>
           ) : (
             <div className="mt-4 space-y-4">
               <SelectField
-                label="Chart type"
+                label={t("Chart type")}
                 value={chartType}
                 onChange={(value) =>
                   setChartType(
@@ -129,20 +127,20 @@ export function DatasetVisualizePage() {
                 options={[
                   {
                     value: "bar",
-                    label: "Bar",
+                    label: t("Bar"),
                   },
                   {
                     value: "line",
-                    label: "Line",
+                    label: t("Line"),
                   },
                 ]}
               />
 
               <SelectField
-                label="X axis"
+                label={t("X axis")}
                 value={xColumn}
                 onChange={setXColumn}
-                placeholder="Select a column"
+                placeholder={t("Select a column")}
                 options={columns.map(
                   (column) => ({
                     value: column,
@@ -153,10 +151,10 @@ export function DatasetVisualizePage() {
 
               {aggregation !== "count" && (
                 <SelectField
-                  label="Y axis"
+                  label={t("Y axis")}
                   value={yColumn}
                   onChange={setYColumn}
-                  placeholder="Select a column"
+                  placeholder={t("Select a column")}
                   options={columns.map(
                     (column) => ({
                       value: column,
@@ -167,7 +165,7 @@ export function DatasetVisualizePage() {
               )}
 
               <SelectField
-                label="Aggregation"
+                label={t("Aggregation")}
                 value={aggregation}
                 onChange={(value) =>
                   setAggregation(
@@ -177,15 +175,15 @@ export function DatasetVisualizePage() {
                 options={[
                   {
                     value: "sum",
-                    label: "Sum",
+                    label: t("Sum"),
                   },
                   {
                     value: "average",
-                    label: "Average",
+                    label: t("Average"),
                   },
                   {
                     value: "count",
-                    label: "Count",
+                    label: t("Count"),
                   },
                 ]}
               />
@@ -204,8 +202,8 @@ export function DatasetVisualizePage() {
               />
             </div>
           ) : chartError ? (
-            <DataError title="Unable to build this chart" error={chartError}>
-              <button type="button" className="font-medium underline underline-offset-4" disabled={isChartFetching} onClick={() => void refetchChart()}>{isChartFetching ? "Retrying…" : "Try again"}</button>
+            <DataError title={t("Unable to build this chart")} error={chartError}>
+              <button type="button" className="font-medium underline underline-offset-4" disabled={isChartFetching} onClick={() => void refetchChart()}>{isChartFetching ? t("Retrying…") : t("Try again")}</button>
             </DataError>
           ) : chart ? (
             <div
@@ -218,13 +216,12 @@ export function DatasetVisualizePage() {
               <div className="mb-5">
                 <h3 className="font-medium text-zinc-900">
                   {chart.aggregation === "count"
-                    ? `Count by ${chart.x}`
-                    : `${formatAggregation(chart.aggregation)} of ${chart.y} by ${chart.x}`}
+                    ? t("Count by {column}", { column: chart.x })
+                    : t("{aggregation} of {y} by {x}", { aggregation: formatAggregation(chart.aggregation), y: chart.y ?? "", x: chart.x })}
                 </h3>
 
                 <p className="mt-1 text-sm text-zinc-500">
-                  {chart.data.length} data points
-                </p>
+                  {t("{count} data points", { count: chart.data.length })}</p>
               </div>
 
               <Chart
@@ -261,6 +258,7 @@ function SelectField({
   placeholder,
   onChange,
 }: SelectFieldProps) {
+  useLocale();
   return (
     <label className="block">
       <span className="mb-1 block text-sm font-medium text-zinc-700">
@@ -305,12 +303,13 @@ function Chart({
   type,
   data,
 }: ChartProps) {
+  useLocale();
   const normalizedData = data.map(
     (point) => ({
       ...point,
       x:
         point.x === null
-          ? "Missing"
+          ? t("Missing")
           : String(point.x),
     }),
   );
@@ -334,6 +333,7 @@ function Chart({
             />
 
             <YAxis
+              tickFormatter={formatDecimal}
               tick={{ fontSize: 12 }}
             />
 
@@ -342,6 +342,7 @@ function Chart({
             <Line
               type="monotone"
               dataKey="y"
+              name={t("Value")}
               stroke="var(--accent-ink)"
               strokeWidth={2}
             />
@@ -369,6 +370,7 @@ function Chart({
           />
 
           <YAxis
+              tickFormatter={formatDecimal}
             tick={{ fontSize: 12 }}
           />
 
@@ -376,6 +378,7 @@ function Chart({
 
           <Bar
             dataKey="y"
+              name={t("Value")}
             fill="var(--accent-ink)"
           />
         </BarChart>
@@ -385,6 +388,7 @@ function Chart({
 }
 
 function EmptyChart() {
+  useLocale();
   return (
     <div className="flex h-[390px] flex-col items-center justify-center text-center">
       <div className="flex size-11 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500">
@@ -392,13 +396,10 @@ function EmptyChart() {
       </div>
 
       <p className="mt-3 text-sm font-medium text-zinc-700">
-        Configure your chart
-      </p>
+        {t("Configure your chart")}</p>
 
       <p className="mt-1 max-w-xs text-sm text-zinc-500">
-        Select X and Y columns to visualize the
-        transformed dataset.
-      </p>
+        {t("Select X and Y columns to visualize the transformed dataset.")}</p>
     </div>
   );
 }
@@ -408,12 +409,12 @@ function formatAggregation(
 ) {
   switch (aggregation) {
     case "sum":
-      return "Sum";
+      return t("Sum");
 
     case "average":
-      return "Average";
+      return t("Average");
 
     case "count":
-      return "Count";
+      return t("Count");
   }
 }

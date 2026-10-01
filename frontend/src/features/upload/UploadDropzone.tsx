@@ -1,3 +1,4 @@
+import { gettext as t, translateMessage, useLocale } from "../../i18n";
 import {
   type ChangeEvent,
   type DragEvent,
@@ -24,6 +25,7 @@ export default function UploadDropzone({
   onFileClear,
   disabled = false,
 }: UploadDropzoneProps) {
+  useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -105,7 +107,7 @@ export default function UploadDropzone({
             onClick={onFileClear}
             disabled={disabled}
             className="rounded-md p-2 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Remove file"
+            aria-label={t("Remove file")}
           >
             <X size={18} />
           </button>
@@ -119,7 +121,7 @@ export default function UploadDropzone({
       <div
         role="button"
         tabIndex={disabled ? -1 : 0}
-        aria-label="Choose a CSV file"
+        aria-label={t("Choose a CSV file")}
         aria-disabled={disabled}
         onKeyDown={(event) => {
           if (!disabled && (event.key === "Enter" || event.key === " ")) {
@@ -159,21 +161,18 @@ export default function UploadDropzone({
         </div>
 
         <p className="mt-5 font-medium text-zinc-900">
-          Drop your CSV here
-        </p>
+          {t("Drop your CSV here")}</p>
 
         <p className="mt-1 text-sm text-zinc-500">
-          or click to choose a file
-        </p>
+          {t("or click to choose a file")}</p>
 
         <p className="mt-5 text-xs text-zinc-400">
-          CSV files up to 25 MB
-        </p>
+          {t("CSV files up to 25 MB")}</p>
       </div>
 
       {validationError && (
         <p className="mt-3 text-sm text-red-600">
-          {validationError}
+          {translateMessage(validationError)}
         </p>
       )}
     </div>

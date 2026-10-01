@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../i18n";
 import { Trash2 } from "lucide-react";
 
 import { useDeleteTransformation } from "../hooks/useTransformations";
@@ -15,14 +16,14 @@ export function TransformationHistory({
   datasetId,
   transformations,
 }: TransformationHistoryProps) {
+  useLocale();
   const deleteTransformation =
     useDeleteTransformation(datasetId);
 
   if (transformations.length === 0) {
     return (
       <p className="mt-3 text-sm text-zinc-500">
-        No transformations have been applied yet.
-      </p>
+        {t("No transformations have been applied yet.")}</p>
     );
   }
 
@@ -57,8 +58,7 @@ export function TransformationHistory({
             className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Trash2 size={15} />
-            Undo from here
-          </button>
+            {t("Undo from here")}</button>
         </div>
       ))}
     </div>
@@ -70,16 +70,16 @@ function getTransformationTitle(
 ): string {
   switch (transformation.type) {
     case "fill_missing":
-      return "Fill missing values";
+      return t("Fill missing values");
 
     case "rename_column":
-      return "Rename column";
+      return t("Rename column");
 
     case "replace_value":
-      return "Replace value";
+      return t("Replace value");
 
     case "delete_column":
-      return "Delete column";
+      return t("Delete column");
   }
 }
 

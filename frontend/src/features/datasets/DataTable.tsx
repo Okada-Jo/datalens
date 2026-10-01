@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../../i18n";
 import { useMemo } from "react";
 import {
   ArrowDown,
@@ -44,6 +45,7 @@ export default function DataTable({
   onRemoveFilter,
   onClearFilters,
 }: DataTableProps) {
+  useLocale();
   const tableColumns = useMemo<
     ColumnDef<TableFeatures, DatasetRow>[]
   >(
@@ -127,8 +129,7 @@ export default function DataTable({
 
         {rows.length === 0 && (
           <div className="px-4 py-12 text-center text-sm text-zinc-400">
-            No rows to display.
-          </div>
+            {t("No rows to display.")}</div>
         )}
       </div>
     </div>
@@ -142,6 +143,7 @@ function SortIcon({
   column: string;
   sort: DatasetSort | null;
 }) {
+  useLocale();
   if (!sort || sort.column !== column) {
     return (
       <ArrowUpDown
@@ -173,18 +175,18 @@ function CellValue({
 }: {
   value: DatasetCell;
 }) {
+  useLocale();
   if (value === null) {
     return (
       <span className="italic text-zinc-300">
-        null
-      </span>
+        {t("null")}</span>
     );
   }
 
   if (typeof value === "boolean") {
     return (
       <span className="font-mono text-xs">
-        {value ? "true" : "false"}
+        {value ? t("true") : t("false")}
       </span>
     );
   }

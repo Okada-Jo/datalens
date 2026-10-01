@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../../i18n";
 import { DataError } from "../../components/DataError";
 import {
   ChevronLeft,
@@ -26,6 +27,7 @@ export default function DataExplorer({
   datasetId,
   columns,
 }: DataExplorerProps) {
+  useLocale();
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("search") ?? "";
 
@@ -191,13 +193,13 @@ export default function DataExplorer({
 
   if (error || !data) {
     return (
-      <DataError title="Unable to display this table" error={error}>
-        <button type="button" className="font-medium underline underline-offset-4" disabled={isFetching} onClick={() => void refetch()}>{isFetching ? "Retrying…" : "Try again"}</button>
+      <DataError title={t("Unable to display this table")} error={error}>
+        <button type="button" className="font-medium underline underline-offset-4" disabled={isFetching} onClick={() => void refetch()}>{isFetching ? t("Retrying…") : t("Try again")}</button>
         {(filters.length > 0 || sort || search || page > 1) && <button type="button" className="font-medium underline underline-offset-4" onClick={() => {
           setSearchInput("");
           updateSearchParams({ filters: null, sort: null, direction: null, search: null, page: null });
-        }}>Reset table view</button>}
-        <Link className="font-medium underline underline-offset-4" to={`/datasets/${datasetId}/clean`}>Review cleaning steps</Link>
+        }}>{t("Reset table view")}</button>}
+        <Link className="font-medium underline underline-offset-4" to={`/datasets/${datasetId}/clean`}>{t("Review cleaning steps")}</Link>
       </DataError>
     );
   }
@@ -242,7 +244,7 @@ export default function DataExplorer({
             onChange={(event) =>
               setSearchInput(event.target.value)
             }
-            placeholder="Search all columns..."
+            placeholder={t("Search all columns...")}
             className="w-full rounded-lg border border-zinc-200 bg-surface py-2 pl-9 pr-9 text-sm text-zinc-700 outline-none placeholder:text-zinc-400 focus:border-zinc-400"
           />
 
@@ -253,7 +255,7 @@ export default function DataExplorer({
                 setSearchInput("");
               }}
               className="absolute right-2 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700"
-              aria-label="Clear search"
+              aria-label={t("Clear search")}
             >
               <X size={14} />
             </button>
@@ -283,10 +285,7 @@ export default function DataExplorer({
 
       <div className="mt-4 flex items-center justify-between">
         <p className="text-sm text-zinc-500">
-          {formatNumber(data.totalRows)}{" "}
-          {filters.length > 0 || search
-            ? "matching rows"
-            : "rows"}
+          {t(filters.length > 0 || search ? "{count} matching rows" : "{count} rows", { count: formatNumber(data.totalRows) })}
         </p>
 
         <div className="flex items-center gap-3">
@@ -299,14 +298,13 @@ export default function DataExplorer({
               page === 1 || isFetching
             }
             className="rounded-lg border border-zinc-200 bg-surface p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
-            aria-label="Previous page"
+            aria-label={t("Previous page")}
           >
             <ChevronLeft size={17} />
           </button>
 
           <span className="min-w-24 text-center text-sm text-zinc-500">
-            Page {data.page} of{" "}
-            {data.totalPages}
+            {t("Page {page} of {pages}", { page: data.page, pages: data.totalPages })}
           </span>
 
           <button
@@ -319,7 +317,7 @@ export default function DataExplorer({
               isFetching
             }
             className="rounded-lg border border-zinc-200 bg-surface p-2 text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
-            aria-label="Next page"
+            aria-label={t("Next page")}
           >
             <ChevronRight size={17} />
           </button>

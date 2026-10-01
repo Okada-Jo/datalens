@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../../i18n";
 import {
   Columns3,
   Database,
@@ -23,6 +24,7 @@ interface DatasetOverviewProps {
 export default function DatasetOverview({
   dataset,
 }: DatasetOverviewProps) {
+  useLocale();
   const columns = dataset.analysis.columns ?? [];
 
   const missingValues = columns.reduce(
@@ -53,8 +55,7 @@ export default function DatasetOverview({
             to={`/datasets/${dataset.id}/explore`}
             className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition hover:bg-accent-hover"
             >
-            Explore data
-            <ArrowRight size={16} />
+            {t("Explore data")}<ArrowRight size={16} />
           </Link>
         </div>
       </div>
@@ -62,25 +63,25 @@ export default function DatasetOverview({
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           icon={<Rows3 size={18} />}
-          label="Rows"
+          label={t("Rows")}
           value={formatNumber(dataset.rowCount ?? 0)}
         />
 
         <MetricCard
           icon={<Columns3 size={18} />}
-          label="Columns"
+          label={t("Columns")}
           value={formatNumber(dataset.columnCount ?? 0)}
         />
 
         <MetricCard
           icon={<Database size={18} />}
-          label="File size"
+          label={t("File size")}
           value={formatFileSize(dataset.fileSize)}
         />
 
         <MetricCard
           icon={<span className="text-sm font-semibold">%</span>}
-          label="Missing values"
+          label={t("Missing values")}
           value={formatNumber(missingValues)}
         />
       </div>
@@ -88,12 +89,10 @@ export default function DatasetOverview({
       <section className="mt-10">
         <div>
           <h2 className="text-lg font-semibold text-zinc-900">
-            Columns
-          </h2>
+            {t("Columns")}</h2>
 
           <p className="mt-1 text-sm text-zinc-500">
-            Types and statistics inferred from your dataset.
-          </p>
+            {t("Types and statistics inferred from your dataset.")}</p>
         </div>
 
         <div className="mt-5 grid gap-4 md:grid-cols-2">
@@ -121,6 +120,7 @@ function MetricCard({
   label,
   value,
 }: MetricCardProps) {
+  useLocale();
   return (
     <div className="rounded-xl border border-zinc-200 bg-surface p-5">
       <div className="flex items-center gap-2 text-zinc-400">

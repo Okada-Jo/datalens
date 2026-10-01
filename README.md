@@ -167,3 +167,13 @@ The CSVs and catalog live in `backend/datasets/sample_data/` and ship in the bac
 ```bash
 python backend/datasets/sample_data/generate.py
 ```
+
+## Localization
+
+The interface supports English, German, and Japanese. The language dropdown beside the theme switcher updates the UI immediately without resetting the current dataset, filters, or form values. The first visit uses the first supported browser language (including regional variants such as `de-AT` and `ja-JP`), falling back to English. An explicit selection is remembered in local storage.
+
+Translation catalogs are in `frontend/src/locales/en.json`, `de.json`, and `ja.json`. Components subscribe with `useLocale()` and wrap interface copy with `gettext` (imported as `t`) from `src/i18n.ts`. Use named placeholders for complete sentences, for example `t("Page {page} of {pages}", { page, pages })`. Keep catalog keys and placeholders consistent across all three files.
+
+Known API error templates are translated at display time with `translateMessage`, so an already-visible error also updates when the language changes. Add new user-facing API messages to all catalogs. Unknown server messages retain their original detail. User data, CSV column names, and exported contents are not translated. Dates and summary numbers use the selected locale.
+
+`npm test` in `frontend` checks catalog parity, placeholders, browser detection, saved preferences, unavailable storage, dynamic error translation, and unwrapped JSX text.

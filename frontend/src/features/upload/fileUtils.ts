@@ -1,3 +1,4 @@
+import { getLocale } from "../../i18n";
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
 
 export type FileValidationResult =
@@ -39,5 +40,5 @@ export function formatFileSize(bytes: number): string {
 
   const value = bytes / Math.pow(1024, unitIndex);
 
-  return `${value.toFixed(unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+  return `${new Intl.NumberFormat(getLocale(), { maximumFractionDigits: unitIndex === 0 ? 0 : 1 }).format(value)} ${units[unitIndex]}`;
 }

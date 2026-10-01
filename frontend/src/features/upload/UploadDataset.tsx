@@ -1,3 +1,4 @@
+import { gettext as t, translateMessage, useLocale } from "../../i18n";
 import { useMutation } from "@tanstack/react-query";
 import { useSample } from "../../lib/api";
 import { queryClient } from "../../lib/queryClient";
@@ -10,6 +11,7 @@ import UploadDropzone from "./UploadDropzone";
 import { useUploadDataset } from "./mutations";
 
 export default function UploadDataset() {
+  useLocale();
   const [file, setFile] = useState<File | null>(null);
 
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ export default function UploadDataset() {
 
       {upload.error && (
         <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {upload.error.message}
+          {translateMessage(upload.error.message)}
         </div>
       )}
 
@@ -76,14 +78,13 @@ export default function UploadDataset() {
                 size={17}
                 className="animate-spin"
               />
-              Analyzing dataset...
-            </>
+              {t("Analyzing dataset...")}</>
           ) : (
             "Explore dataset"
           )}
         </button>
       )}
-      {sample.error && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{sample.error.message}</p>}
+      {sample.error && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{translateMessage(sample.error.message)}</p>}
       <SampleDatasets disabled={busy} pendingId={sample.isPending ? sample.variables : undefined}
         onSelect={(id) => { if (!busy) { upload.reset(); sample.mutate(id); } }} />
     </div>

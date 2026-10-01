@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../../i18n";
 import {
   CalendarDays,
   Hash,
@@ -53,6 +54,7 @@ const typeConfig: Record<
 export default function ColumnCard({
   column,
 }: ColumnCardProps) {
+  useLocale();
   const type = typeConfig[column.type];
 
   return (
@@ -66,12 +68,11 @@ export default function ColumnCard({
           <div className="mt-2 flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-md bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-600">
               {type.icon}
-              {type.label}
+              {t(type.label)}
             </span>
 
             <span className="text-xs text-zinc-400">
-              {formatNumber(column.unique_count)} unique
-            </span>
+              {t("{count} unique", { count: formatNumber(column.unique_count) })}</span>
           </div>
         </div>
 
@@ -90,18 +91,17 @@ function MissingIndicator({
 }: {
   column: ColumnAnalysis;
 }) {
+  useLocale();
   if (column.missing_count === 0) {
     return (
       <span className="text-xs text-zinc-400">
-        Complete
-      </span>
+        {t("Complete")}</span>
     );
   }
 
   return (
     <span className="text-xs font-medium text-amber-600">
-      {column.missing_percentage}% missing
-    </span>
+      {t("{percent}% missing", { percent: formatDecimal(column.missing_percentage) })}</span>
   );
 }
 
@@ -110,11 +110,11 @@ function ColumnStatistics({
 }: {
   column: ColumnAnalysis;
 }) {
+  useLocale();
   if (!column.statistics) {
     return (
       <p className="text-sm text-zinc-400">
-        No additional statistics
-      </p>
+        {t("No additional statistics")}</p>
     );
   }
 
@@ -128,15 +128,15 @@ function ColumnStatistics({
     return (
       <div className="grid grid-cols-3 gap-4">
         <Statistic
-          label="Min"
+          label={t("Min")}
           value={formatDecimal(stats.min)}
         />
         <Statistic
-          label="Average"
+          label={t("Average")}
           value={formatDecimal(stats.mean)}
         />
         <Statistic
-          label="Max"
+          label={t("Max")}
           value={formatDecimal(stats.max)}
         />
       </div>
@@ -153,11 +153,11 @@ function ColumnStatistics({
     return (
       <div className="grid grid-cols-2 gap-4">
         <Statistic
-          label="Earliest"
+          label={t("Earliest")}
           value={formatDate(String(stats.min))}
         />
         <Statistic
-          label="Latest"
+          label={t("Latest")}
           value={formatDate(String(stats.max))}
         />
       </div>
@@ -195,8 +195,7 @@ function ColumnStatistics({
 
   return (
     <p className="text-sm text-zinc-400">
-      {formatNumber(column.unique_count)} distinct values
-    </p>
+      {t("{count} distinct values", { count: formatNumber(column.unique_count) })}</p>
   );
 }
 
@@ -207,6 +206,7 @@ function Statistic({
   label: string;
   value: string;
 }) {
+  useLocale();
   return (
     <div>
       <p className="text-xs text-zinc-400">{label}</p>

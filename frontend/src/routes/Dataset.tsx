@@ -1,3 +1,4 @@
+import { gettext as t, useLocale } from "../i18n";
 import { ArrowLeft, LoaderCircle } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
@@ -5,6 +6,7 @@ import { useDataset } from "../features/datasets/queries";
 import DatasetOverview from "../features/upload/DatasetOverview";
 
 export default function DatasetPage() {
+  useLocale();
   const { datasetId } = useParams();
 
   const {
@@ -29,19 +31,16 @@ export default function DatasetPage() {
       <main className="flex min-h-screen items-center justify-center bg-zinc-50 px-6">
         <div className="text-center">
           <h1 className="text-xl font-semibold text-zinc-900">
-            Dataset unavailable
-          </h1>
+            {t("Dataset unavailable")}</h1>
 
           <p className="mt-2 text-sm text-zinc-500">
-            We couldn't load this dataset.
-          </p>
+            {t("We couldn't load this dataset.")}</p>
 
           <Link
             to="/"
             className="mt-6 inline-block text-sm font-medium text-zinc-900 underline"
           >
-            Return home
-          </Link>
+            {t("Return home")}</Link>
         </div>
       </main>
     );
