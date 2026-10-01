@@ -51,10 +51,18 @@ def build_chart_data(
             df[y_column],
             errors="coerce",
         )
+        invalid_count = int((df[y_column].notna() & numeric_values.isna()).sum())
+        if invalid_count:
+            raise ValueError(
+                f"Cannot calculate {aggregation} for column '{y_column}': "
+                f"{invalid_count} non-numeric value(s) cannot be compared as numbers. "
+                "Choose a numeric Y column, clean these values, or switch to Count."
+            )
         if numeric_values.notna().sum() == 0:
-          raise ValueError(
-              f"Column '{y_column}' does not contain numeric values."
-          )
+            raise ValueError(
+                f"Column '{y_column}' has no numeric values to chart. "
+                "Choose another Y column or switch to Count."
+            )
 
         working_df = df.copy()
         working_df["_chart_value"] = numeric_values

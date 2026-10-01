@@ -1,3 +1,4 @@
+import { DataError } from "../../components/DataError";
 import {
   ChevronLeft,
   ChevronRight,
@@ -6,7 +7,7 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { formatNumber } from "../../lib/format";
 import { useDatasetRows } from "./queries";
@@ -58,6 +59,7 @@ export default function DataExplorer({
     isLoading,
     isFetching,
     error,
+    refetch,
   } = useDatasetRows(
     datasetId,
     page,
@@ -189,9 +191,14 @@ export default function DataExplorer({
 
   if (error || !data) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-        Dataset rows could not be loaded.
-      </div>
+      <DataError title="Unable to display this table" error={error}>
+        <button type="button" className="font-medium underline underline-offset-4" disabled={isFetching} onClick={() => void refetch()}>{isFetching ? "Retrying…" : "Try again"}</button>
+        {(filters.length > 0 || sort || search || page > 1) && <button type="button" className="font-medium underline underline-offset-4" onClick={() => {
+          setSearchInput("");
+          updateSearchParams({ filters: null, sort: null, direction: null, search: null, page: null });
+        }}>Reset table view</button>}
+        <Link className="font-medium underline underline-offset-4" to={`/datasets/${datasetId}/clean`}>Review cleaning steps</Link>
+      </DataError>
     );
   }
 

@@ -166,15 +166,18 @@ def apply_numeric_filter(
     if operator not in NUMBER_OPERATORS:
         raise ValueError(
             f"Unsupported operator '{operator}' "
-            "for numeric column."
+            f"for numeric column '{series.name}'. Use equals, greater than, or less than."
         )
 
     try:
         numeric_value = float(value)
-    except ValueError as exc:
+    except (ValueError, TypeError) as exc:
         raise ValueError(
-            "Numeric filters require a valid number."
+            f"Column '{series.name}' requires a valid number for this filter."
         ) from exc
+
+    if not math.isfinite(numeric_value):
+        raise ValueError(f"Column '{series.name}' requires a finite number for this filter.")
 
     if operator == "equals":
         mask = series == numeric_value
@@ -199,7 +202,8 @@ def apply_text_filter(
     if operator not in TEXT_OPERATORS:
         raise ValueError(
             f"Unsupported operator '{operator}' "
-            "for text column."
+            f"for column '{series.name}': it contains text or mixed data types. "
+            "Use contains or equals, or clean the column to contain only numbers."
         )
 
     text_series = series.astype("string")
@@ -233,11 +237,17 @@ def apply_sort(
             f"Unknown sort column: {column}"
         )
 
-    return df.sort_values(
-        by=column,
-        ascending=direction == "asc",
-        na_position="last",
-    )
+    try:
+        return df.sort_values(
+            by=column,
+            ascending=direction == "asc",
+            na_position="last",
+        )
+    except TypeError as exc:
+        raise ValueError(
+            f"Cannot sort column '{column}' because its values have incompatible data types. "
+            "Clean the column to use a consistent type, or remove this sort."
+        ) from exc
 
 
 def paginate_dataframe(

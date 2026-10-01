@@ -10,10 +10,17 @@ def apply_transformations(
     result = df.copy()
 
     for transformation in transformations:
-        result = apply_transformation(
-            result,
-            transformation,
-        )
+        try:
+            result = apply_transformation(result, transformation)
+        except (TypeError, ValueError) as exc:
+            column = transformation.config.get("column", "unknown")
+            detail = str(exc) if isinstance(exc, ValueError) else (
+                "The replacement value is incompatible with the column's data type."
+            )
+            raise ValueError(
+                f"Cannot apply '{transformation.type}' to column '{column}'. "
+                f"{detail} Review or undo this step in Clean."
+            ) from exc
 
     return result
 

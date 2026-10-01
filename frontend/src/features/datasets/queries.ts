@@ -1,3 +1,4 @@
+import { retryDataQuery } from "../../lib/apiError";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import { getDataset, getDatasetChart, getDatasetRows, getDatasets, type DatasetFilter, type DatasetSort } from "../../lib/api";
@@ -54,6 +55,7 @@ export function useDatasetRows(
       ),
     enabled: Boolean(id),
     placeholderData: keepPreviousData,
+    retry: retryDataQuery,
   });
 }
 
@@ -88,6 +90,7 @@ export function useDatasetChart(
       );
     },
 
+    retry: retryDataQuery,
     enabled: Boolean(
       datasetId &&
       x &&

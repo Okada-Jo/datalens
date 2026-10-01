@@ -1,0 +1,47 @@
+[
+  {
+    "id": "retail",
+    "name": "The Sunday Market",
+    "topic": "Retail orders",
+    "description": "Follow orders, discounts, and revenue across a fictional online store.",
+    "rowCount": 20000,
+    "columnCount": 10,
+    "fileSize": 1385528
+  },
+  {
+    "id": "bikes",
+    "name": "City in Motion",
+    "topic": "Bike sharing",
+    "description": "Explore commuting peaks, ride lengths, and stations around a fictional city.",
+    "rowCount": 24000,
+    "columnCount": 10,
+    "fileSize": 2089694
+  },
+  {
+    "id": "energy",
+    "name": "A Brighter Grid",
+    "topic": "Renewable energy",
+    "description": "Compare solar and wind output with weather and household demand.",
+    "rowCount": 17520,
+    "columnCount": 10,
+    "fileSize": 1444166
+  },
+  {
+    "id": "cafes",
+    "name": "Daily Grind",
+    "topic": "Caf\u00e9 sales",
+    "description": "Find favorite drinks, busy hours, and satisfaction trends across six caf\u00e9s.",
+    "rowCount": 15000,
+    "columnCount": 10,
+    "fileSize": 1143973
+  },
+  {
+    "id": "streaming",
+    "name": "One More Episode",
+    "topic": "Streaming habits",
+    "description": "Discover how genre, device, and subscription shape fictional viewing sessions.",
+    "rowCount": 12000,
+    "columnCount": 10,
+    "fileSize": 958211
+  }
+]

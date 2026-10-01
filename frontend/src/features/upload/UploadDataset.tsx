@@ -1,3 +1,7 @@
+import { useMutation } from "@tanstack/react-query";
+import { useSample } from "../../lib/api";
+import { queryClient } from "../../lib/queryClient";
+import { SampleDatasets } from "./SampleDatasets";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -10,9 +14,18 @@ export default function UploadDataset() {
 
   const navigate = useNavigate();
   const upload = useUploadDataset();
+  const sample = useMutation({
+    mutationFn: useSample,
+    onSuccess: (dataset) => {
+      queryClient.setQueryData(["datasets", dataset.id], dataset);
+      void queryClient.invalidateQueries({ queryKey: ["datasets"] });
+      navigate(`/datasets/${dataset.id}`);
+    },
+  });
+  const busy = upload.isPending || sample.isPending;
 
   function handleUpload() {
-    if (!file) {
+    if (!file || busy) {
       return;
     }
 
@@ -25,11 +38,13 @@ export default function UploadDataset() {
 
   function handleFileSelect(selectedFile: File) {
     upload.reset();
+    sample.reset();
     setFile(selectedFile);
   }
 
   function handleFileClear() {
     upload.reset();
+    sample.reset();
     setFile(null);
   }
 
@@ -39,7 +54,7 @@ export default function UploadDataset() {
         file={file}
         onFileSelect={handleFileSelect}
         onFileClear={handleFileClear}
-        disabled={upload.isPending}
+        disabled={busy}
       />
 
       {upload.error && (
@@ -52,7 +67,7 @@ export default function UploadDataset() {
         <button
           type="button"
           onClick={handleUpload}
-          disabled={upload.isPending}
+          disabled={busy}
           className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 text-sm font-medium text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {upload.isPending ? (
@@ -68,6 +83,9 @@ export default function UploadDataset() {
           )}
         </button>
       )}
+      {sample.error && <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{sample.error.message}</p>}
+      <SampleDatasets disabled={busy} pendingId={sample.isPending ? sample.variables : undefined}
+        onSelect={(id) => { if (!busy) { upload.reset(); sample.mutate(id); } }} />
     </div>
   );
 }

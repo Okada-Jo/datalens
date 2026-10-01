@@ -1,3 +1,5 @@
+import { readApiError } from "./apiError";
+import { samplesSchema } from "../schemas/sample";
 import { chartResponseSchema, type ChartAggregation, type ChartResponse } from "../schemas/chart";
 import { datasetSchema, datasetsSchema } from "../schemas/dataset";
 import { datasetRowsSchema } from "../schemas/datasetRows";
@@ -117,11 +119,7 @@ export async function getDatasetRows(
   );
 
   if (!response.ok) {
-    const data = await response.json().catch(() => null);
-
-    throw new Error(
-      data?.detail ?? "Failed to fetch dataset rows.",
-    );
+    throw await readApiError(response, "Dataset rows could not be loaded. Please try again.");
   }
 
   const data: unknown = await response.json();
@@ -218,12 +216,25 @@ export async function getDatasetChart(
   );
 
   if (!response.ok) {
-    throw new Error(
-      "Dataset chart could not be loaded.",
-    );
+    throw await readApiError(response, "The chart could not be loaded. Please try again.");
   }
 
   const data = await response.json();
 
   return chartResponseSchema.parse(data);
+}
+
+export async function getSamples() {
+  const response = await fetch(`${API_BASE_URL}/datasets/samples/`);
+  if (!response.ok) throw new Error("Sample datasets could not be loaded.");
+  return samplesSchema.parse(await response.json());
+}
+
+export async function useSample(sampleId: string) {
+  const response = await fetch(`${API_BASE_URL}/datasets/samples/${encodeURIComponent(sampleId)}/use/`, { method: "POST" });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.detail ?? "This sample could not be opened. Please try again.");
+  }
+  return datasetSchema.parse(await response.json());
 }

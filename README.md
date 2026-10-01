@@ -18,6 +18,7 @@ Upload a CSV, inspect its structure, explore and filter the data, apply non-dest
 ## Features
 
 - CSV upload and automatic dataset analysis
+- Five large fictional sample datasets, opened as editable 24-hour copies
 - Search, filtering, sorting, and pagination
 - URL-backed explorer state
 - Fill missing values
@@ -119,7 +120,7 @@ See `frontend/.env.example`.
 
 ## Tests
 
-The backend has 37 automated tests covering the transformation pipeline, querying, exports, chart aggregation, models, and API behavior.
+The backend has 48 automated tests covering the transformation pipeline, querying, exports, chart aggregation, models, and API behavior.
 
 ```bash
 cd backend
@@ -130,6 +131,7 @@ Frontend quality checks:
 
 ```bash
 cd frontend
+npm test
 npm run lint
 npm run build
 ```
@@ -143,3 +145,25 @@ It does not include authentication, cloud storage, arbitrary SQL, or large-scale
 The focus is the core workflow:
 
 **Upload → Explore → Clean → Visualize → Export**
+
+## Sample datasets
+
+The upload page offers five entirely synthetic datasets. No setup or database seeding is required.
+
+| Name | Topic | Rows |
+| --- | --- | ---: |
+| The Sunday Market | Retail orders | 20,000 |
+| City in Motion | Bike sharing | 24,000 |
+| A Brighter Grid | Renewable energy | 17,520 |
+| Daily Grind | Café sales | 15,000 |
+| One More Episode | Streaming habits | 12,000 |
+
+Each CSV has ten columns, including dates, categories, numeric measures, and deliberate missing values for cleaning practice. Values are fictional examples, not real-world statistics.
+
+`GET /api/datasets/samples/` returns the catalog without creating database records. `POST /api/datasets/samples/{id}/use/` copies a bundled CSV into upload storage and runs the same analysis as a file upload. Every selection gets a new dataset ID and supports exploration, transformations, charts, and exports. Its file and database records expire after 24 hours; bundled templates remain available for future selections.
+
+The CSVs and catalog live in `backend/datasets/sample_data/` and ship in the backend Docker image. To regenerate them deterministically:
+
+```bash
+python backend/datasets/sample_data/generate.py
+```

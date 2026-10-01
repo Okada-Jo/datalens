@@ -85,3 +85,6 @@ nav a[aria-current="page"] { color: var(--accent-ink); border-color: var(--accen
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
+
+.sample-card:not(:disabled):hover { border-color: var(--accent-ink); background: var(--color-zinc-50); box-shadow: 0 4px 14px #0a302008; }
+.sample-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-ink); }

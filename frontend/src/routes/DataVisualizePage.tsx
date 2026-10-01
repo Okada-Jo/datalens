@@ -1,3 +1,4 @@
+import { DataError } from "../components/DataError";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -45,6 +46,9 @@ export function DatasetVisualizePage() {
   const {
     data: rowsData,
     isLoading: isRowsLoading,
+    error: rowsError,
+    refetch: refetchRows,
+    isFetching: isRowsFetching,
   } = useDatasetRows(
     datasetId!,
     1,
@@ -59,6 +63,7 @@ export function DatasetVisualizePage() {
     isLoading: isChartLoading,
     isFetching: isChartFetching,
     error: chartError,
+    refetch: refetchChart,
   } = useDatasetChart(
     datasetId,
     xColumn,
@@ -107,6 +112,10 @@ export function DatasetVisualizePage() {
               />
               Loading columns...
             </div>
+          ) : rowsError ? (
+            <div className="mt-4"><DataError title="Unable to load columns" error={rowsError}>
+              <button type="button" className="underline" disabled={isRowsFetching} onClick={() => void refetchRows()}>Try again</button>
+            </DataError></div>
           ) : (
             <div className="mt-4 space-y-4">
               <SelectField
@@ -195,11 +204,9 @@ export function DatasetVisualizePage() {
               />
             </div>
           ) : chartError ? (
-            <div className="flex h-[390px] items-center justify-center">
-              <p className="text-sm text-red-600">
-                Chart data could not be loaded.
-              </p>
-            </div>
+            <DataError title="Unable to build this chart" error={chartError}>
+              <button type="button" className="font-medium underline underline-offset-4" disabled={isChartFetching} onClick={() => void refetchChart()}>{isChartFetching ? "Retrying…" : "Try again"}</button>
+            </DataError>
           ) : chart ? (
             <div
               className={

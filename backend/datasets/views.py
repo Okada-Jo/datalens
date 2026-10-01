@@ -3,6 +3,8 @@ from pathlib import Path
 import json
 
 from django.http import HttpResponse
+from django.core.files import File
+from .services.samples import SAMPLE_ROOT, sample_catalog
 
 from rest_framework.decorators import action
 
@@ -62,8 +64,11 @@ class DatasetViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        return self.create_from_file(uploaded_file)
+
+    def create_from_file(self, uploaded_file, name=None):
         dataset = Dataset.objects.create(
-            name=Path(uploaded_file.name).stem,
+            name=name or Path(uploaded_file.name).stem,
             original_filename=uploaded_file.name,
             file=uploaded_file,
             file_size=uploaded_file.size,
@@ -98,6 +103,20 @@ class DatasetViewSet(viewsets.ModelViewSet):
             serializer.data,
             status=status.HTTP_201_CREATED,
         )
+
+    @action(detail=False, methods=["get"], url_path="samples")
+    def samples(self, request):
+        return Response(sample_catalog())
+
+    @action(detail=False, methods=["post"], url_path=r"samples/(?P<sample_id>[^/.]+)/use")
+    def use_sample(self, request, sample_id=None):
+        sample = next((item for item in sample_catalog() if item["id"] == sample_id), None)
+        if sample is None:
+            return Response({"detail": "Sample dataset not found."}, status=status.HTTP_404_NOT_FOUND)
+        # Only catalog IDs are allowed; the bundled template is never stored as the upload.
+        filename = f"{sample['id']}.csv"
+        with (SAMPLE_ROOT / filename).open("rb") as handle:
+            return self.create_from_file(File(handle, name=filename), name=sample["name"])
 
     @action(
         detail=True,

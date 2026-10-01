@@ -1,3 +1,4 @@
+import { DataError } from "../components/DataError";
 import { useParams } from "react-router-dom";
 
 import { TransformationForm } from "../components/TransformationForm";
@@ -55,9 +56,9 @@ export function DatasetCleanPage() {
             Loading columns...
           </p>
         ) : rowsError ? (
-          <p className="mt-3 text-sm text-red-600">
-            Columns could not be loaded.
-          </p>
+          <div className="mt-3"><DataError title="Unable to load columns" error={rowsError}>
+            <p>Review the transformation history below and undo the step causing the error.</p>
+          </DataError></div>
         ) : (
           <TransformationForm
             datasetId={datasetId}
