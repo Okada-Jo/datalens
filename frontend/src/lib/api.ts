@@ -3,8 +3,9 @@ import { datasetSchema, datasetsSchema } from "../schemas/dataset";
 import { datasetRowsSchema } from "../schemas/datasetRows";
 import { transformationSchema, transformationsSchema, type TransformationType } from "../schemas/transformation";
 
-const API_URL = "http://localhost:8000/api";
-
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ??
+  "http://localhost:8000/api";
 export type ExportFormat = "csv" | "json";
 
 export type SortDirection = "asc" | "desc";
@@ -36,7 +37,7 @@ export interface CreateTransformationInput {
 }
 
 export async function getDatasets() {
-  const response = await fetch(`${API_URL}/datasets/`);
+  const response = await fetch(`${API_BASE_URL}/datasets/`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch datasets.");
@@ -48,7 +49,7 @@ export async function getDatasets() {
 }
 
 export async function getDataset(id: string) {
-  const response = await fetch(`${API_URL}/datasets/${id}/`);
+  const response = await fetch(`${API_BASE_URL}/datasets/${id}/`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch dataset.");
@@ -64,7 +65,7 @@ export async function uploadDataset(file: File) {
 
   formData.append("file", file);
 
-  const response = await fetch(`${API_URL}/datasets/`, {
+  const response = await fetch(`${API_BASE_URL}/datasets/`, {
     method: "POST",
     body: formData,
   });
@@ -112,7 +113,7 @@ export async function getDatasetRows(
   }
 
   const response = await fetch(
-    `${API_URL}/datasets/${id}/rows/?${params}`,
+    `${API_BASE_URL}/datasets/${id}/rows/?${params}`,
   );
 
   if (!response.ok) {
@@ -132,7 +133,7 @@ export async function getTransformations(
   datasetId: string,
 ) {
   const response = await fetch(
-    `${API_URL}/datasets/${datasetId}/transformations/`,
+    `${API_BASE_URL}/datasets/${datasetId}/transformations/`,
   );
 
   if (!response.ok) {
@@ -151,7 +152,7 @@ export async function createTransformation(
   input: CreateTransformationInput,
 ) {
   const response = await fetch(
-    `${API_URL}/datasets/${datasetId}/transformations/`,
+    `${API_BASE_URL}/datasets/${datasetId}/transformations/`,
     {
       method: "POST",
       headers: {
@@ -177,7 +178,7 @@ export async function deleteTransformation(
   transformationId: string,
 ) {
   const response = await fetch(
-    `${API_URL}/datasets/${datasetId}/transformations/${transformationId}/`,
+    `${API_BASE_URL}/datasets/${datasetId}/transformations/${transformationId}/`,
     {
       method: "DELETE",
     },
@@ -194,7 +195,7 @@ export function getDatasetExportUrl(
   datasetId: string,
   format: ExportFormat,
 ): string {
-  return `${API_URL}/datasets/${datasetId}/export/?type=${format}`;
+  return `${API_BASE_URL}/datasets/${datasetId}/export/?type=${format}`;
 }
 
 export async function getDatasetChart(
@@ -213,7 +214,7 @@ export async function getDatasetChart(
   }
 
   const response = await fetch(
-    `${API_URL}/datasets/${datasetId}/chart/?${params}`,
+    `${API_BASE_URL}/datasets/${datasetId}/chart/?${params}`,
   );
 
   if (!response.ok) {

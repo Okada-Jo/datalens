@@ -14,8 +14,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-*.local
-
 
 # --------------------
 # Backend / Python
@@ -34,6 +32,8 @@ backend/media/
 # --------------------
 
 .env
+.env.local
+.env.*.local
 .env.*
 !.env.example
 
